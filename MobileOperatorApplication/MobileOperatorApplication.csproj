@@ -76,50 +76,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="CALLS.cs">
-      <DependentUpon>ModelOracle.tt</DependentUpon>
-    </Compile>
-    <Compile Include="CLIENTS.cs">
-      <DependentUpon>ModelOracle.tt</DependentUpon>
-    </Compile>
-    <Compile Include="CONTRACTS.cs">
-      <DependentUpon>ModelOracle.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Data\SaltedHash.cs" />
-    <Compile Include="DEBITS.cs">
-      <DependentUpon>ModelOracle.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EMPLOYEES.cs">
-      <DependentUpon>ModelOracle.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ModelOracle.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ModelOracle.tt</DependentUpon>
-    </Compile>
     <Compile Include="Model\Post.cs" />
-    <Compile Include="Oracle\DataGeneration.cs" />
-    <Compile Include="Oracle\OracleDbConfiguration.cs" />
+    <Compile Include="Data\DataGeneration.cs" />
     <Compile Include="Oracle\OracleProvider.cs" />
-    <Compile Include="Oracle\StraightOracleProvider.cs" />
-    <Compile Include="PAYMENTS.cs">
-      <DependentUpon>ModelOracle.tt</DependentUpon>
-    </Compile>
-    <Compile Include="PHONE_NUMBERS.cs">
-      <DependentUpon>ModelOracle.tt</DependentUpon>
-    </Compile>
-    <Compile Include="POSTS.cs">
-      <DependentUpon>ModelOracle.tt</DependentUpon>
-    </Compile>
-    <Compile Include="SERVICES.cs">
-      <DependentUpon>ModelOracle.tt</DependentUpon>
-    </Compile>
-    <Compile Include="SERVICE_DESCRIPTIONS.cs">
-      <DependentUpon>ModelOracle.tt</DependentUpon>
-    </Compile>
-    <Compile Include="TARIFF_PLAN.cs">
-      <DependentUpon>ModelOracle.tt</DependentUpon>
-    </Compile>
+    <Compile Include="Repository\IRepository.cs" />
+    <Compile Include="Repository\PostRepository.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -134,16 +95,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ModelOracle.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ModelOracle.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ModelOracle.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ModelOracle.edmx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -161,13 +112,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EntityDeploy Include="ModelOracle.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>ModelOracle.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <None Include="ModelOracle.edmx.diagram">
-      <DependentUpon>ModelOracle.edmx</DependentUpon>
-    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -176,18 +120,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="ModelOracle.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>ModelOracle.Context.cs</LastGenOutput>
-      <DependentUpon>ModelOracle.edmx</DependentUpon>
-    </Content>
-    <Content Include="ModelOracle.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>ModelOracle.edmx</DependentUpon>
-      <LastGenOutput>ModelOracle.cs</LastGenOutput>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

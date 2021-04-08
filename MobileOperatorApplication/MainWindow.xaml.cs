@@ -1,4 +1,7 @@
-﻿using MobileOperatorApplication.Oracle;
+﻿using MobileOperatorApplication.Data;
+using MobileOperatorApplication.Model;
+using MobileOperatorApplication.Oracle;
+using MobileOperatorApplication.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,15 +28,11 @@ namespace MobileOperatorApplication
 		{
 			InitializeComponent();
 
+
 			//OracleProvider oracleProvider = new OracleProvider();
-			string oracleConnection = "DATA SOURCE = 192.168.43.153:1521 / orcl;" +
-				" USER ID=c##baa; PASSWORD=12345; Pooling = False;";
-			OracleProvider straightOracleProvider = new OracleProvider(oracleConnection);
-			foreach(var post in straightOracleProvider.GetPosts())
-            {
-				Console.WriteLine(post);
-            }
-			Console.WriteLine(straightOracleProvider.GetHash("123", "123123131"));
+
+			//DataGeneration.GeneratePosts();
+
 		}
 	}
 }

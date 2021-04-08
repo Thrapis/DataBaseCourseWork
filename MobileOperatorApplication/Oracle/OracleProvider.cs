@@ -12,29 +12,31 @@ namespace MobileOperatorApplication.Oracle
 {
     public class OracleProvider : IDisposable
     {
-        OracleConnection connection;
+        public OracleConnection Connection { get; private set; }
 
-        public OracleProvider(string connectionString)
+        public OracleProvider()
         {
-            connection = new OracleConnection(connectionString);
-            connection.Open();
-            Console.WriteLine(connection.GetSessionInfo());
+            string connectionString = "DATA SOURCE = DESKTOP-H8ENAQU:1521 / orcl;" +
+                " USER ID=c##baa; PASSWORD=12345; Pooling = False;";
+            Connection = new OracleConnection(connectionString);
+            Connection.Open();
+            Console.WriteLine(Connection.GetSessionInfo());
         }
 
         public void Dispose()
         {
-            connection.Close();
+            Connection.Close();
         }
 
         public string GetHash(string username, string password)
         {
             string sql = $"select CreateAccount(\'{username}\', \'{password}\') from dual";
-            return connection.QueryFirst<string>(sql);
+            return Connection.QueryFirst<string>(sql);
         }
 
         public IEnumerable<Post> GetPosts()
         {
-            return connection.Query<Post>("select * from POSTS");
+            return Connection.Query<Post>("select * from POST");
         }
     }
 }
