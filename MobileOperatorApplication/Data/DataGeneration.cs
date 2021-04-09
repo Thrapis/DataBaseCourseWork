@@ -38,34 +38,35 @@ namespace MobileOperatorApplication.Data
             return result;
         }
 
-        //public static void GenerateClients(int count)
-        //{
-        //    ClientRepository repository = new ClientRepository();
+        public static void GenerateClients(int count)
+        {
+            ClientRepository repository = new ClientRepository();
 
-        //    string firstnames_path = @"E:\Study\BD_Course_Work\DataForGeneration\firstnames.txt";
-        //    string lastnames_path = @"E:\Study\BD_Course_Work\DataForGeneration\lastnames.txt";
-        //    string firstnames_string = "";
-        //    string lastnames_string = "";
-        //    using (StreamReader sr = new StreamReader(firstnames_path))
-        //    {
-        //        firstnames_string = sr.ReadToEnd();
-        //    }
-        //    using (StreamReader sr = new StreamReader(lastnames_path))
-        //    {
-        //        lastnames_string = sr.ReadToEnd();
-        //    }
-        //    firstnames_string = firstnames_string.Replace("\r\n", ";");
-        //    lastnames_string = lastnames_string.Replace("\n", ";");
-        //    List<string> firstnames_list = new List<string>(firstnames_string.Split(';'));
-        //    List<string> lastnames_list = new List<string>(lastnames_string.Split(';'));
+            string firstnames_path = @"E:\Study\BD_Course_Work\DataForGeneration\firstnames.txt";
+            string lastnames_path = @"E:\Study\BD_Course_Work\DataForGeneration\lastnames.txt";
+            string firstnames_string = "";
+            string lastnames_string = "";
+            using (StreamReader sr = new StreamReader(firstnames_path))
+            {
+                firstnames_string = sr.ReadToEnd();
+            }
+            using (StreamReader sr = new StreamReader(lastnames_path))
+            {
+                lastnames_string = sr.ReadToEnd();
+            }
+            firstnames_string = firstnames_string.Replace("\r\n", ";");
+            lastnames_string = lastnames_string.Replace("\n", ";");
+            List<string> firstnames_list = new List<string>(firstnames_string.Split(';'));
+            List<string> lastnames_list = new List<string>(lastnames_string.Split(';'));
 
-        //    Random rand = new Random();
-        //    for (int i = 0; i < count; i++)
-        //    {
-        //        string firstname = firstnames_list[rand.Next(0, firstnames_list.Count)];
-        //        string lastname = lastnames_list[rand.Next(0, lastnames_list.Count)];
-        //        repository.Insert(firstname + " " + lastname, GetRandomPassportNumber(rand));
-        //    }
-        //}
+            Random rand = new Random();
+            for (int i = 0; i < count; i++)
+            {
+                string firstname = firstnames_list[rand.Next(0, firstnames_list.Count)];
+                string lastname = lastnames_list[rand.Next(0, lastnames_list.Count)];
+                Client client = new Client(firstname + " " + lastname, GetRandomPassportNumber(rand));
+                repository.Insert(client);
+            }
+        }
     }
 }

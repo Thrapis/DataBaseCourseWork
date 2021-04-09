@@ -29,7 +29,8 @@ namespace MobileOperatorApplication
 			InitializeComponent();
 
 
-			//OracleProvider oracleProvider = new OracleProvider();
+			OracleProvider oracleProvider = new OracleProvider();
+			Console.WriteLine(oracleProvider.GetAccount("Thrapis", "Mrlololoshka12"));
 
 			//DataGeneration.GeneratePosts();
 

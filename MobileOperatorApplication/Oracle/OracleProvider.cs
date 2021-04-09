@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Dapper;
 using MobileOperatorApplication.Model;
+using Dapper.Oracle;
 
 namespace MobileOperatorApplication.Oracle
 {
@@ -28,10 +29,40 @@ namespace MobileOperatorApplication.Oracle
             Connection.Close();
         }
 
-        public string GetHash(string username, string password)
+        public int CreateAccount(string login, string password, int access_level)
         {
-            string sql = $"select CreateAccount(\'{username}\', \'{password}\') from dual";
-            return Connection.QueryFirst<string>(sql);
+            OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+            queryParameters.Add("@par_username", login, OracleMappingType.NVarchar2, ParameterDirection.Input);
+            queryParameters.Add("@par_password", password, OracleMappingType.NVarchar2, ParameterDirection.Input);
+            queryParameters.Add("@par_access_level", access_level, OracleMappingType.Int32, ParameterDirection.Input);
+            queryParameters.Add("@created", 0, OracleMappingType.Int32, ParameterDirection.Output);
+
+            string sql = $@"Account_Package.CreateAccount";
+            Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
+            int created = queryParameters.Get<int>("@created");
+            return created;
+        }
+
+        public AccountInfo GetAccount(string login, string password)
+        {
+            OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+            queryParameters.Add("@par_username", login, OracleMappingType.NVarchar2, ParameterDirection.InputOutput);
+            queryParameters.Add("@par_password", password, OracleMappingType.NVarchar2, ParameterDirection.Input);
+            queryParameters.Add("@access_level", -999, OracleMappingType.Int32, ParameterDirection.Output);
+
+            string sql = $@"Account_Package.GetAccount";
+            Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
+            string outlogin = queryParameters.Get<string>("@par_username"); ;
+            int access_level = queryParameters.Get<int>("@access_level");
+            
+            if (outlogin == login && access_level > 0)
+            {
+                return new AccountInfo(login, access_level);
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public IEnumerable<Post> GetPosts()
