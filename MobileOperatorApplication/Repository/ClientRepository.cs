@@ -33,13 +33,13 @@ namespace MobileOperatorApplication.Repository
 
         public int Insert(Client item)
         {
-            string sql = $@"insert into Client (Full_Name, Passport_Number) values ('{item.FULL_NAME}', '{item.PASSPORT_NUMBER}')";
+            string sql = $@"insert into Client (Full_Name, Passport_Number, Account_Login) values ('{item.FULL_NAME}', '{item.PASSPORT_NUMBER}', '{item.ACCOUNT_LOGIN}')";
             return provider.Connection.Execute(sql);
         }
 
         public int Update(Client item)
         {
-            string sql = $@"update Client set Full_Name = '{item.FULL_NAME}', Passport_Number = '{item.PASSPORT_NUMBER}' where Id = {item.ID}";
+            string sql = $@"update Client set Full_Name = '{item.FULL_NAME}', Passport_Number = '{item.PASSPORT_NUMBER}', Account_Login = '{item.ACCOUNT_LOGIN}' where Id = {item.ID}";
             return provider.Connection.Execute(sql);
         }
 

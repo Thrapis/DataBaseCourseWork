@@ -1,4 +1,5 @@
 ﻿using MobileOperatorApplication.Model;
+using MobileOperatorApplication.Oracle;
 using MobileOperatorApplication.Repository;
 using System;
 using System.Collections.Generic;
@@ -40,8 +41,6 @@ namespace MobileOperatorApplication.Data
 
         public static void GenerateClients(int count)
         {
-            ClientRepository repository = new ClientRepository();
-
             string firstnames_path = @"E:\Study\BD_Course_Work\DataForGeneration\firstnames.txt";
             string lastnames_path = @"E:\Study\BD_Course_Work\DataForGeneration\lastnames.txt";
             string firstnames_string = "";
@@ -58,13 +57,18 @@ namespace MobileOperatorApplication.Data
             lastnames_string = lastnames_string.Replace("\n", ";");
             List<string> firstnames_list = new List<string>(firstnames_string.Split(';'));
             List<string> lastnames_list = new List<string>(lastnames_string.Split(';'));
-
             Random rand = new Random();
+
+            OracleProvider provider = new OracleProvider();
+            ClientRepository repository = new ClientRepository();
             for (int i = 0; i < count; i++)
             {
                 string firstname = firstnames_list[rand.Next(0, firstnames_list.Count)];
                 string lastname = lastnames_list[rand.Next(0, lastnames_list.Count)];
-                Client client = new Client(firstname + " " + lastname, GetRandomPassportNumber(rand));
+                string fullname = firstname + " " + lastname;
+                string login = firstname.ToLower() + "_" + lastname.ToLower();
+                provider.CreateAccount(login, "12345", 1);
+                Client client = new Client(fullname, GetRandomPassportNumber(rand), login);
                 repository.Insert(client);
             }
         }

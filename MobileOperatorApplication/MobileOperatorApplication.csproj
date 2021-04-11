@@ -81,13 +81,30 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Model\AccountInfo.cs" />
+    <Compile Include="Model\Call.cs" />
+    <Compile Include="Model\Contract.cs" />
+    <Compile Include="Model\Debit.cs" />
     <Compile Include="Model\Employee.cs" />
     <Compile Include="Model\Client.cs" />
+    <Compile Include="Model\Payment.cs" />
+    <Compile Include="Model\PhoneNumber.cs" />
     <Compile Include="Model\Post.cs" />
     <Compile Include="Data\DataGeneration.cs" />
+    <Compile Include="Model\Service.cs" />
+    <Compile Include="Model\ServiceDescription.cs" />
+    <Compile Include="Model\TariffPlan.cs" />
     <Compile Include="Oracle\OracleProvider.cs" />
+    <Compile Include="Repository\ServiceRepository.cs" />
+    <Compile Include="Repository\PaymentRepository.cs" />
+    <Compile Include="Repository\DebitRepository.cs" />
+    <Compile Include="Repository\CallRepository.cs" />
+    <Compile Include="Repository\EmployeeRepository.cs" />
     <Compile Include="Repository\IRepository.cs" />
     <Compile Include="Repository\ClientRepository.cs" />
+    <Compile Include="Repository\ContractRepository.cs" />
+    <Compile Include="Repository\ServiceDescriptionRepository.cs" />
+    <Compile Include="Repository\TariffPlanRepository.cs" />
+    <Compile Include="Repository\PhoneNumberRepository.cs" />
     <Compile Include="Repository\PostRepository.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

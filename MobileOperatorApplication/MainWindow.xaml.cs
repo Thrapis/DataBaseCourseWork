@@ -30,8 +30,10 @@ namespace MobileOperatorApplication
 
 
 			OracleProvider oracleProvider = new OracleProvider();
+			OracleProvider oracleProvider2 = new OracleProvider();
 			Console.WriteLine(oracleProvider.GetAccount("Thrapis", "Mrlololoshka12"));
-
+			Console.WriteLine(oracleProvider2.GetAccount("Thrapis", "Mrlololoshka12"));
+			Console.WriteLine(new DateTime(2001,2,8,14,30,45).ToString("yyyy-MM-dd HH:mm:ss"));
 			//DataGeneration.GeneratePosts();
 
 		}
