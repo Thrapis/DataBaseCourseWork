@@ -33,13 +33,17 @@ namespace MobileOperatorApplication.Repository
 
         public int Insert(Contract item)
         {
-            string sql = $@"insert into Contract (Tariff_Id, Client_Id, Employee_Id) values ({item.TARIFF_ID}, {item.CLIENT_ID}, {item.EMPLOYEE_ID})";
+            string signing_datetime_format = $"TO_TIMESTAMP({item.SIGNING_DATETIME.ToString("yyyy-MM-dd HH:mm:ss")})";
+
+            string sql = $@"insert into Contract (Tariff_Id, Client_Id, Employee_Id, Signing_Datetime) values ({item.TARIFF_ID}, {item.CLIENT_ID}, {item.EMPLOYEE_ID}, {signing_datetime_format})";
             return provider.Connection.Execute(sql);
         }
 
         public int Update(Contract item)
         {
-            string sql = $@"update Contract set Tariff_Id = {item.TARIFF_ID}, Client_Id = {item.CLIENT_ID}, Employee_Id = {item.EMPLOYEE_ID} where Id = {item.ID}";
+            string signing_datetime_format = $"TO_TIMESTAMP({item.SIGNING_DATETIME.ToString("yyyy-MM-dd HH:mm:ss")})";
+
+            string sql = $@"update Contract set Tariff_Id = {item.TARIFF_ID}, Client_Id = {item.CLIENT_ID}, Employee_Id = {item.EMPLOYEE_ID}, Signing_Datetime = {signing_datetime_format} where Id = {item.ID}";
             return provider.Connection.Execute(sql);
         }
 

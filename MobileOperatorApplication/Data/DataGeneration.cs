@@ -10,67 +10,446 @@ using System.Threading.Tasks;
 
 namespace MobileOperatorApplication.Data
 {
-    public static class DataGeneration
-    {
-        public static void GeneratePosts()
+	public static class DataGeneration
+	{
+		public static int GenerateAllData()
         {
-            PostRepository repository = new PostRepository();
-            repository.Insert(new Post("Senior manager", "First"));
-            repository.Insert(new Post("Cashier", "Second"));
-            repository.Insert(new Post("Manager", "Third"));
+			int generated = 0;
+
+			Console.WriteLine("Generation of Posts");
+			generated += GeneratePosts();
+			Console.WriteLine("Generation of Tariff Plans");
+			generated += GenerateTariffPlans();
+			Console.WriteLine("Generation of Service Descriptions");
+			generated += GenerateServiceDescriptions();
+			Console.WriteLine("Generation of Clients");
+			generated += GenerateClients(10000);
+			Console.WriteLine("Generation of Employees");
+			generated += GenerateEmployees(200);
+			Console.WriteLine("Generation of Contracts");
+			generated += GenerateContracts(12000);
+			Console.WriteLine("Generation of Services");
+			generated += GenerateServices();
+			Console.WriteLine("Generation of Phone Numbers");
+			generated += GeneratePhoneNumbers();
+			Console.WriteLine("Generation of Calls");
+			generated += GenerateCalls(50000);
+			Console.WriteLine("Generation of Payments");
+			generated += GeneratePayments();
+			Console.WriteLine("Generation of Debits");
+			generated += GenerateDebits();
+
+			return generated;
         }
 
-        private static string GetRandomPassportNumber(Random rand)
-        {
-            string alph = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            string nums = "0123456789";
+		public static int GeneratePosts()
+		{
+			int inserted = 0;
+			PostRepository repository = new PostRepository();
 
-            string result = "";
-            result += alph[rand.Next(0, alph.Length)];
-            result += alph[rand.Next(0, alph.Length)];
-            result += nums[rand.Next(0, nums.Length)];
-            result += nums[rand.Next(0, nums.Length)];
-            result += nums[rand.Next(0, nums.Length)];
-            result += nums[rand.Next(0, nums.Length)];
-            result += nums[rand.Next(0, nums.Length)];
-            result += nums[rand.Next(0, nums.Length)];
-            result += nums[rand.Next(0, nums.Length)];
+			inserted += repository.Insert(new Post("Senior manager", "First"));
+			inserted += repository.Insert(new Post("Cashier", "Second"));
+			inserted += repository.Insert(new Post("Manager", "Third"));
 
-            return result;
-        }
+			return inserted;
+		}
 
-        public static void GenerateClients(int count)
-        {
-            string firstnames_path = @"E:\Study\BD_Course_Work\DataForGeneration\firstnames.txt";
-            string lastnames_path = @"E:\Study\BD_Course_Work\DataForGeneration\lastnames.txt";
-            string firstnames_string = "";
-            string lastnames_string = "";
-            using (StreamReader sr = new StreamReader(firstnames_path))
-            {
-                firstnames_string = sr.ReadToEnd();
-            }
-            using (StreamReader sr = new StreamReader(lastnames_path))
-            {
-                lastnames_string = sr.ReadToEnd();
-            }
-            firstnames_string = firstnames_string.Replace("\r\n", ";");
-            lastnames_string = lastnames_string.Replace("\n", ";");
-            List<string> firstnames_list = new List<string>(firstnames_string.Split(';'));
-            List<string> lastnames_list = new List<string>(lastnames_string.Split(';'));
-            Random rand = new Random();
+		private static string GetRandomPassportNumber(Random rand)
+		{
+			string alph = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+			string nums = "0123456789";
 
-            OracleProvider provider = new OracleProvider();
-            ClientRepository repository = new ClientRepository();
-            for (int i = 0; i < count; i++)
-            {
-                string firstname = firstnames_list[rand.Next(0, firstnames_list.Count)];
-                string lastname = lastnames_list[rand.Next(0, lastnames_list.Count)];
-                string fullname = firstname + " " + lastname;
-                string login = firstname.ToLower() + "_" + lastname.ToLower();
-                provider.CreateAccount(login, "12345", 1);
-                Client client = new Client(fullname, GetRandomPassportNumber(rand), login);
-                repository.Insert(client);
-            }
-        }
-    }
+			string result = "";
+			result += alph[rand.Next(0, alph.Length)];
+			result += alph[rand.Next(0, alph.Length)];
+			result += nums[rand.Next(0, nums.Length)];
+			result += nums[rand.Next(0, nums.Length)];
+			result += nums[rand.Next(0, nums.Length)];
+			result += nums[rand.Next(0, nums.Length)];
+			result += nums[rand.Next(0, nums.Length)];
+			result += nums[rand.Next(0, nums.Length)];
+			result += nums[rand.Next(0, nums.Length)];
+
+			return result;
+		}
+
+		public static int GenerateClients(int count)
+		{
+			string firstnames_path = @"E:\Study\BD_Course_Work\DataForGeneration\firstnames.txt";
+			string lastnames_path = @"E:\Study\BD_Course_Work\DataForGeneration\lastnames.txt";
+			string firstnames_string = "";
+			string lastnames_string = "";
+			int inserted = 0;
+			using (StreamReader sr = new StreamReader(firstnames_path))
+			{
+				firstnames_string = sr.ReadToEnd();
+			}
+			using (StreamReader sr = new StreamReader(lastnames_path))
+			{
+				lastnames_string = sr.ReadToEnd();
+			}
+			firstnames_string = firstnames_string.Replace("\r\n", ";");
+			lastnames_string = lastnames_string.Replace("\n", ";");
+			List<string> firstnames_list = new List<string>(firstnames_string.Split(';'));
+			List<string> lastnames_list = new List<string>(lastnames_string.Split(';'));
+			Random rand = new Random();
+
+			OracleProvider provider = new OracleProvider();
+			ClientRepository repository = new ClientRepository();
+			for (int i = 0; i < count; i++)
+			{
+				string firstname = firstnames_list[rand.Next(0, firstnames_list.Count)];
+				string lastname = lastnames_list[rand.Next(0, lastnames_list.Count)];
+				string fullname = firstname + " " + lastname;
+				string login = firstname.ToLower() + "_" + lastname.ToLower();
+				provider.CreateAccount(login, "12345", 1);
+				Client client = new Client(fullname, GetRandomPassportNumber(rand), login);
+				inserted += repository.Insert(client);
+			}
+			return inserted;
+		}
+
+		public static int GenerateTariffPlans()
+		{
+			int inserted = 0;
+
+			TariffPlanRepository repository = new TariffPlanRepository();
+
+			inserted += repository.Insert(new TariffPlan("Безлимитище+", 25.58f));
+			inserted += repository.Insert(new TariffPlan("Супер 10", 21.50f));
+			inserted += repository.Insert(new TariffPlan("Супер 25", 30.60f));
+			inserted += repository.Insert(new TariffPlan("Супер", 10.81f));
+			inserted += repository.Insert(new TariffPlan("Супер GO", 8.84f));
+			inserted += repository.Insert(new TariffPlan("ULTRA", 55.09f));
+			inserted += repository.Insert(new TariffPlan("Абсолют", 149.14f));
+			inserted += repository.Insert(new TariffPlan("Легко сказать", 0.66f));
+			inserted += repository.Insert(new TariffPlan("Особый", 1.23f));
+			inserted += repository.Insert(new TariffPlan("Детский", 1.19f));
+			inserted += repository.Insert(new TariffPlan("Близкий", 0.66f));
+			inserted += repository.Insert(new TariffPlan("Победа", 1.00f));
+
+			return inserted;
+		}
+
+		public static int GenerateServiceDescriptions()
+		{
+			int inserted = 0;
+			ServiceDescriptionRepository repository = new ServiceDescriptionRepository();
+
+			inserted += repository.Insert(new ServiceDescription("3 телефона", "3 номера телефона, которые позволят пользоваться вашим тарифным планом, указанным в договоре."));
+			inserted += repository.Insert(new ServiceDescription("USSD-расписание транспорта", "Сервис позволит вам получать информацию о времени до прибытия общественного транспорта на остановочны пункт."));
+			inserted += repository.Insert(new ServiceDescription("Сервис «Parkme»", "Сервис предоставляет абонентам возможность совершить с помощью отправки SMS-сообщения или" +
+				" в процессе пользования мобильным приложением юридически значимые действия, необходимые для заказа и оплаты временного возмездного пользования абонентом свободного места" +
+				" на платной парковке."));
+			inserted += repository.Insert(new ServiceDescription("Сервис «Парковка»", "Сервис предоставляет абонентам возможность оплатить парковку своего автомобиля с помощь отправки SMS-, USSD-" +
+				" запроса или в процессе пользования мобильным приложением."));
+			inserted += repository.Insert(new ServiceDescription("Семья под присмотром", "Благодаря услуге «Семья под присмотром» каждый родитель перестанет постоянно гадать, где сейчас находится" +
+				" ребенок: в школе, на тренировке, на прогулке с друзьями или в гостях у бабушки. Услуга «Семья под присмотром» позволяет вам определять местоположение ребенка и узнавать, по какому адресу" +
+				" он находится прямо сейчас."));
+			inserted += repository.Insert(new ServiceDescription("Локатор", "Локатор — это простая возможность определения местоположения абонентов: твоих друзей и близких. Ты прямо сейчас можешь узнать," +
+				" где находятся твои друзья и близкие."));
+			inserted += repository.Insert(new ServiceDescription("Уроки английского", "ервис «Портал по изучению английского языка позволяет абонентам при помощи простого SMS-интерфейса, WAP-интерфейса," +
+				" а также приложения изучать английские слова, также абонентам предоставляется возможность изучение правил грамматики английского языка с помощью видеороликов на WAP-портале." +
+				" Чтобы воспользоваться сервисом, вам необходимо оформить подписку."));
+			inserted += repository.Insert(new ServiceDescription("Уроки русского", "Сервис «Уроки русского» поможет вам совершенствовать знания русского языка. Предусмотрена возможность использования" +
+				" сервиса в качестве толкового словаря. Ежедневно сервис в простой игровой форме посредством SMS сообщений предлагает ответить на интересные вопросы, посвященные грамматике, лексике и фразеологии."));
+			inserted += repository.Insert(new ServiceDescription("Уроки польского", "Сервис «Уроки польского» поможет вам совершенствовать знания польского языка и подготовится к" +
+				" собеседованию на получение Карты поляка. Обучение производится при помощи простого SMS-интерфейса. Предусмотрена возможность использования сервиса в качестве переводчика." +
+				" Вы можете самостоятельно выбрать тему обучения."));
+			inserted += repository.Insert(new ServiceDescription("Родная мова", "Сервис «Родная мова» помогает абонентам совершенствовать знания белорусского языка. Изучение белорусских слов" +
+				" производится при помощи простого SMS-интерфейса или WAP-интерфейса. Предусмотрена возможность использования сервиса в качестве переводчика."));
+			inserted += repository.Insert(new ServiceDescription("SMS-ИТОГИ", "SMS-ИТОГИ — услуга, позволяющая с помощью SMS-запроса получать результаты репетиционного и централизованного тестирования."));
+			inserted += repository.Insert(new ServiceDescription("Премиум-контент в образовательных сервисах", "Услуга «Премиум-контент в образовательных сервисах» - это доступ к расширенному функционалу платформы." +
+				" Данная платформа обрабатывает и предоставляет в удобном электронном виде информацию об успеваемости учащихся."));
+			inserted += repository.Insert(new ServiceDescription("Баланс веса", "Сервис «Баланс веса» позволяет абонентам рассчитать индекс массы тела, выбрать подходящую для себя диету, а также получать" +
+				" ежедневную информацию о пользе продуктов для здорового питания."));
+			inserted += repository.Insert(new ServiceDescription("Баланс воды", "Сервис «Баланс воды» позволяет абоненту следить за уровнем воды в организме, исходя из индивидуальных параметров: роста," +
+				" веса, возраста и физической активности. Сервис «Баланс воды» поможет контролировать водный баланс и превратит питье воды в полезную привычку."));
+			inserted += repository.Insert(new ServiceDescription("Клуб скидок", "Услуга «Клуб скидок» —лучшие скидки города в Вашем телефоне: лучшие рестораны, СПА, салоны красоты," +
+				" спортивные залы и многое другое со скидками до 90%. Подписчикам услуги не нужно покупать каждый купон по отдельности: пользоваться промокодами можно одновременно" +
+				" и без всяких ограничений. Главное условие — еженедельная подписка."));
+			inserted += repository.Insert(new ServiceDescription("Объявления и реклама", "Размещай объявления в газетах, на радио, телеканалах и интернет-сайтах, а также получай подробную информацию" +
+				" о рекламируемых посредством СМИ товарах (услугах)."));
+			inserted += repository.Insert(new ServiceDescription("Мобильные вакансии", "Услуга «Мобильные вакансии» заключается в предоставлении доступа к информации о новых вакансиях на Портале."));
+
+			return inserted;
+		}
+
+		public static int GenerateEmployees(int count, float first_part = 0.1f, float second_part = 0.35f, float third_part = 0.55f)
+		{
+			int inserted = 0;
+
+			string firstnames_path = @"E:\Study\BD_Course_Work\DataForGeneration\firstnames.txt";
+			string lastnames_path = @"E:\Study\BD_Course_Work\DataForGeneration\lastnames.txt";
+			string firstnames_string = "";
+			string lastnames_string = "";
+			using (StreamReader sr = new StreamReader(firstnames_path))
+			{
+				firstnames_string = sr.ReadToEnd();
+			}
+			using (StreamReader sr = new StreamReader(lastnames_path))
+			{
+				lastnames_string = sr.ReadToEnd();
+			}
+			firstnames_string = firstnames_string.Replace("\r\n", ";");
+			lastnames_string = lastnames_string.Replace("\n", ";");
+			List<string> firstnames_list = new List<string>(firstnames_string.Split(';'));
+			List<string> lastnames_list = new List<string>(lastnames_string.Split(';'));
+			Random rand = new Random();
+
+			EmployeeRepository repository = new EmployeeRepository();
+			OracleProvider provider = new OracleProvider();
+
+			for (int i = 0; i < count * first_part; i++)
+			{
+				string firstname = firstnames_list[rand.Next(0, firstnames_list.Count)];
+				string lastname = lastnames_list[rand.Next(0, lastnames_list.Count)];
+				string fullname = firstname + " " + lastname;
+				string login = firstname.ToLower() + "_" + lastname.ToLower();
+
+				provider.CreateAccount(login, "Password3", 3);
+				Employee employee = new Employee(fullname, 1, login);
+				inserted += repository.Insert(employee);
+			}
+
+			for (int i = 0; i < count * second_part; i++)
+			{
+				string firstname = firstnames_list[rand.Next(0, firstnames_list.Count)];
+				string lastname = lastnames_list[rand.Next(0, lastnames_list.Count)];
+				string fullname = firstname + " " + lastname;
+				string login = firstname.ToLower() + "_" + lastname.ToLower();
+
+				provider.CreateAccount(login, "Password2", 2);
+				Employee employee = new Employee(fullname, 2, login);
+				inserted += repository.Insert(employee);
+			}
+
+			for (int i = 0; i < count * third_part; i++)
+			{
+				string firstname = firstnames_list[rand.Next(0, firstnames_list.Count)];
+				string lastname = lastnames_list[rand.Next(0, lastnames_list.Count)];
+				string fullname = firstname + " " + lastname;
+				string login = firstname.ToLower() + "_" + lastname.ToLower();
+
+				provider.CreateAccount(login, "Password1", 2);
+				Employee employee = new Employee(fullname, 3, login);
+				inserted += repository.Insert(employee);
+			}
+
+			return inserted;
+		}
+
+		public static int GenerateContracts(int count)
+		{
+			int inserted = 0;
+			
+			IEnumerable<TariffPlan> tariff_plans = new TariffPlanRepository().GetAll();
+			IEnumerable<Client> clients = new ClientRepository().GetAll();
+			IEnumerable<Employee> employees = new EmployeeRepository().GetAll();
+			
+			ContractRepository repository = new ContractRepository();
+
+			if (tariff_plans.Count() == 0 || employees.Count() == 0 || clients.Count() == 0)
+				throw new Exception("Can't generate contracts");
+
+				Random rand = new Random();
+
+			for (int i = 0; i < count; i++)
+			{
+				TariffPlan tariff_plan = tariff_plans.ElementAt(rand.Next(0, tariff_plans.Count()));
+				Client client = clients.ElementAt(rand.Next(0, clients.Count()));
+				Employee employee = employees.ElementAt(rand.Next(0, employees.Count()));
+
+				DateTime signing_datetime = DateTime.Now.AddDays(rand.Next(-720, 0));
+
+				inserted += repository.Insert(new Contract(tariff_plan.ID, client.ID, employee.ID, signing_datetime));
+			}
+
+			return inserted;
+		}
+
+		public static int GenerateServices(int min_serv_count = 0, int max_serv_count = 5)
+		{
+			int inserted = 0;
+
+			IEnumerable<Contract> contracts = new ContractRepository().GetAll();
+			IEnumerable<ServiceDescription> serviceDescriptions = new ServiceDescriptionRepository().GetAll();
+
+			if (contracts.Count() == 0 || serviceDescriptions.Count() == 0)
+				throw new Exception("Can't generate services");
+
+			ServiceRepository repository = new ServiceRepository();
+
+			Random rand = new Random();
+
+			for (int i = 0; i < contracts.Count(); i++)
+			{
+				Contract contract = contracts.ElementAt(i);
+
+				SortedSet<int> service_descriptions = new SortedSet<int>();
+				int serv_count = rand.Next(min_serv_count, max_serv_count + 1);
+
+				while (service_descriptions.Count < serv_count)
+				{
+					service_descriptions.Append(serviceDescriptions.ElementAt(rand.Next(0, serviceDescriptions.Count())).ID);
+				}
+
+				for (int j = 0; j < service_descriptions.Count; j++)
+				{
+					float amount = (float)(rand.NextDouble() * 5 + 2.5);
+					DateTime disconnect = DateTime.Now.AddDays(rand.NextDouble() * 90 + 1);
+					DateTime connect = disconnect.AddMonths(-3);
+					Service service = new Service(contract.ID, service_descriptions.ElementAt(j), amount, connect, disconnect);
+
+					inserted += repository.Insert(service);
+				}       
+			}
+
+			return inserted;
+		}
+
+		private static string GetRandomPhoneNumber(Random rand)
+		{
+			string nums = "0123456789";
+
+			string result = "+375";
+			
+			for (int i = 0; i < 9; i++)
+			{
+				result += nums[rand.Next(0, nums.Length)];
+			}
+
+			return result;
+		}
+
+		public static int GeneratePhoneNumbers()
+		{
+			int inserted = 0;
+
+			IEnumerable<Contract> contracts = new ContractRepository().GetAll();
+			IEnumerable<Service> services = new ServiceRepository().GetAll();
+
+			PhoneNumberRepository repository = new PhoneNumberRepository();
+
+			if (contracts.Count() == 0 || services.Count() == 0)
+				throw new Exception("Can't generate phone numbers");
+
+			Random rand = new Random();
+
+			for (int i = 0; i < contracts.Count(); i++)
+			{
+				int temp_insert = 0;
+
+				for (int j = 0; j < services.Count(); j++)
+				{
+					if (contracts.ElementAt(i).ID == services.ElementAt(j).ID)
+					{
+						if (services.ElementAt(j).DESCRIPTION_ID == 1)
+						{
+							while (temp_insert < 3)
+								temp_insert += repository.Insert(new PhoneNumber(GetRandomPhoneNumber(rand), contracts.ElementAt(i).ID));
+
+							break;
+						}
+					}
+				}
+
+				while (temp_insert < 1)
+					temp_insert += repository.Insert(new PhoneNumber(GetRandomPhoneNumber(rand), contracts.ElementAt(i).ID));
+
+				inserted += temp_insert;
+			}
+
+			return inserted;
+		}
+
+		public static int GenerateCalls(int count)
+		{
+			int inserted = 0;
+
+			IEnumerable<Contract> contracts = new ContractRepository().GetAll();
+
+			if (contracts.Count() == 0)
+				throw new Exception("Can't generate calls");
+
+			CallRepository repository = new CallRepository();
+
+			Random rand = new Random();
+
+			for (int i = 0; i < count; i++)
+			{
+				Contract contract = contracts.ElementAt(rand.Next(0, contracts.Count()));
+
+				int contact_id = contract.ID;
+				DateTime talk_time = new DateTime(0, 0, rand.Next(0, 2), rand.Next(0, 24), rand.Next(0, 60), rand.Next(0, 60));
+				DateTime call_dateTime = contract.SIGNING_DATETIME.AddTicks(rand.Next(0, (int)(contract.SIGNING_DATETIME.Ticks - DateTime.Now.Ticks)));
+
+				inserted += repository.Insert(new Call(contact_id, GetRandomPhoneNumber(rand), talk_time, call_dateTime));
+			}
+			
+			return inserted;
+		}
+
+		public static int GeneratePayments(int max_payments_count = 14, float min_payments = 2.5f, float max_payments = 140f)
+		{
+			int inserted = 0;
+
+			IEnumerable<Contract> contracts = new ContractRepository().GetAll();
+
+			if (contracts.Count() == 0)
+				throw new Exception("Can't generate calls");
+
+			PaymentRepository repository = new PaymentRepository();
+
+			Random rand = new Random();
+
+			for (int i = 0; i < contracts.Count(); i++)
+			{
+				Contract contract = contracts.ElementAt(i);
+
+				int payments_count = rand.Next(1, max_payments_count);
+
+				for (int j = 0; j < payments_count; j++)
+                {
+					float payment = (float)rand.NextDouble() * (max_payments - min_payments) + min_payments;
+					DateTime payment_datetime = contract.SIGNING_DATETIME.AddTicks((int)rand.Next(0, (int)(contract.SIGNING_DATETIME.Ticks - DateTime.Now.Ticks)));
+
+					inserted += repository.Insert(new Payment(contract.ID, payment, payment_datetime));
+				}
+			}
+
+			return inserted;
+		}
+
+		public static int GenerateDebits(int max_debits_count = 14, float min_debits = 2.5f, float max_debits = 140f)
+		{
+			int inserted = 0;
+
+			IEnumerable<Contract> contracts = new ContractRepository().GetAll();
+
+			if (contracts.Count() == 0)
+				throw new Exception("Can't generate calls");
+
+			DebitRepository repository = new DebitRepository();
+
+			Random rand = new Random();
+
+			for (int i = 0; i < contracts.Count(); i++)
+			{
+				Contract contract = contracts.ElementAt(i);
+
+				int debits_count = rand.Next(1, max_debits_count);
+
+				for (int j = 0; j < debits_count; j++)
+				{
+					float debit = (float)rand.NextDouble() * (max_debits - min_debits) + min_debits;
+					DateTime debit_datetime = contract.SIGNING_DATETIME.AddTicks((int)rand.Next(0, (int)(contract.SIGNING_DATETIME.Ticks - DateTime.Now.Ticks)));
+
+					inserted += repository.Insert(new Debit(contract.ID, debit, debit_datetime, ""));
+				}
+			}
+
+			return inserted;
+		}
+	}
 }
