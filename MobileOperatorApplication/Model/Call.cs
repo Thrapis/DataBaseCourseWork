@@ -11,7 +11,7 @@ namespace MobileOperatorApplication.Model
         public int ID { get; set; }
         public int CONTRACT_ID { get; set; }
         public string TO_PHONE_NUMBER { get; set; }
-        public DateTime TALK_TIME { get; set; }
+        public TimeSpan TALK_TIME { get; set; }
         public DateTime CALL_DATETIME { get; set; }
 
         public Call()
@@ -19,7 +19,7 @@ namespace MobileOperatorApplication.Model
 
         }
 
-        public Call(int contract_id, string to_phone_number, DateTime talk_time, DateTime call_datetime)
+        public Call(int contract_id, string to_phone_number, TimeSpan talk_time, DateTime call_datetime)
         {
             CONTRACT_ID = contract_id;
             TO_PHONE_NUMBER = to_phone_number;
@@ -27,7 +27,7 @@ namespace MobileOperatorApplication.Model
             CALL_DATETIME = call_datetime;
         }
 
-        public Call(int id, int contract_id, string to_phone_number, DateTime talk_time, DateTime call_datetime)
+        public Call(int id, int contract_id, string to_phone_number, TimeSpan talk_time, DateTime call_datetime)
         {
             ID = id;
             CONTRACT_ID = contract_id;

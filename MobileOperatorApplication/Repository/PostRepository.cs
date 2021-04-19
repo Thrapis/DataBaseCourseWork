@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Dapper;
 using MobileOperatorApplication.Oracle;
+using System.Data;
+using Dapper.Oracle;
 
 namespace MobileOperatorApplication.Repository
 {
@@ -21,32 +23,59 @@ namespace MobileOperatorApplication.Repository
 
         public IEnumerable<Post> GetAll()
         {
-            string sql = $"select * from Post";
-            return provider.Connection.Query<Post>(sql);
+            OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+            queryParameters.Add("@post_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
+
+            string sql = $"Post_Package.GetAllPosts";
+            return provider.Connection.Query<Post>(sql, queryParameters, commandType: CommandType.StoredProcedure);
         }
 
         public Post Get(int id)
         {
-            string sql = $"select * from Post where id = {id}";
-            return provider.Connection.QueryFirst<Post>(sql);
+            OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+            queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
+
+            string sql = $@"Post_Package.GetPostById";
+            return provider.Connection.QueryFirst<Post>(sql, queryParameters);
         }
 
         public int Insert(Post item)
         {
-            string sql = $@"insert into Post (Post_Name, Category) values ('{item.POST_NAME}', '{item.CATEGORY}')";
-            return provider.Connection.Execute(sql);
+            OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+            queryParameters.Add("@par_post_name", item.POST_NAME, OracleMappingType.NVarchar2, ParameterDirection.Input);
+            queryParameters.Add("@par_category", item.CATEGORY, OracleMappingType.NVarchar2, ParameterDirection.Input);
+            queryParameters.Add("@inserted", 0, OracleMappingType.Int64, ParameterDirection.Output);
+
+            string sql = $@"Post_Package.InsertPost";
+            provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
+            int inserted = queryParameters.Get<int>("@inserted");
+            return inserted;
         }
 
         public int Update(Post item)
         {
-            string sql = $@"update Post set Post_Name = '{item.POST_NAME}', Category = '{item.CATEGORY}' where Id = {item.ID}";
-            return provider.Connection.Execute(sql);
+            OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+            queryParameters.Add("@par_id", item.ID, OracleMappingType.Int64, ParameterDirection.Input);
+            queryParameters.Add("@par_post_name", item.POST_NAME, OracleMappingType.NVarchar2, ParameterDirection.Input);
+            queryParameters.Add("@par_category", item.CATEGORY, OracleMappingType.NVarchar2, ParameterDirection.Input);
+            queryParameters.Add("@updated", 0, OracleMappingType.Int64, ParameterDirection.Output);
+
+            string sql = $@"Post_Package.UpdatePost";
+            provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
+            int updated = queryParameters.Get<int>("@updated");
+            return updated;
         }
 
         public int Delete(int id)
         {
-            string sql = $"delete from Post where Id = {id}";
-            return provider.Connection.Execute(sql);
+            OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+            queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
+            queryParameters.Add("@deleted", 0, OracleMappingType.Int64, ParameterDirection.Output);
+
+            string sql = $@"Post_Package.DeletePost";
+            provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
+            int deleted = queryParameters.Get<int>("@deleted");
+            return deleted;
         }
 
         public void Dispose()

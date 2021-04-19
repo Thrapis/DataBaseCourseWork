@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Dapper;
 using MobileOperatorApplication.Oracle;
+using Dapper.Oracle;
+using System.Data;
 
 namespace MobileOperatorApplication.Repository
 {
@@ -21,32 +23,59 @@ namespace MobileOperatorApplication.Repository
 
         public IEnumerable<TariffPlan> GetAll()
         {
-            string sql = $"select * from Tariff_Plan";
-            return provider.Connection.Query<TariffPlan>(sql);
+            OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+            queryParameters.Add("@tariff_plan_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
+
+            string sql = $"TariffPlan_Package.GetAllTariffPlans";
+            return provider.Connection.Query<TariffPlan>(sql, queryParameters, commandType: CommandType.StoredProcedure);
         }
 
         public TariffPlan Get(int id)
         {
-            string sql = $"select * from Tariff_Plan where id = {id}";
-            return provider.Connection.QueryFirst<TariffPlan>(sql);
+            OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+            queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
+
+            string sql = $@"TariffPlan_Package.GetTariffPlanById";
+            return provider.Connection.QueryFirst<TariffPlan>(sql, queryParameters);
         }
 
         public int Insert(TariffPlan item)
         {
-            string sql = $@"insert into Tariff_Plan (Tariff_Name, Tariff_Amount) values ('{item.TARIFF_NAME}', {item.TARIFF_AMOUNT})";
-            return provider.Connection.Execute(sql);
+            OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+            queryParameters.Add("@par_tariff_name", item.TARIFF_NAME, OracleMappingType.NVarchar2, ParameterDirection.Input);
+            queryParameters.Add("@par_tariff_amount", item.TARIFF_AMOUNT, OracleMappingType.BinaryFloat, ParameterDirection.Input);
+            queryParameters.Add("@inserted", 0, OracleMappingType.Int64, ParameterDirection.Output);
+
+            string sql = $@"TariffPlan_Package.InsertTariffPlan";
+            provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
+            int inserted = queryParameters.Get<int>("@inserted");
+            return inserted;
         }
 
         public int Update(TariffPlan item)
         {
-            string sql = $@"update Tariff_Plan set Tariff_Name = '{item.TARIFF_NAME}', Tariff_Amount = {item.TARIFF_AMOUNT} where Id = {item.ID}";
-            return provider.Connection.Execute(sql);
+            OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+            queryParameters.Add("@par_id", item.ID, OracleMappingType.Int64, ParameterDirection.Input);
+            queryParameters.Add("@par_tariff_name", item.TARIFF_NAME, OracleMappingType.NVarchar2, ParameterDirection.Input);
+            queryParameters.Add("@par_tariff_amount", item.TARIFF_AMOUNT, OracleMappingType.BinaryFloat, ParameterDirection.Input);
+            queryParameters.Add("@updated", 0, OracleMappingType.Int64, ParameterDirection.Output);
+
+            string sql = $@"TariffPlan_Package.UpdateTariffPlan";
+            provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
+            int updated = queryParameters.Get<int>("@updated");
+            return updated;
         }
 
         public int Delete(int id)
         {
-            string sql = $"delete from Tariff_Plan where Id = {id}";
-            return provider.Connection.Execute(sql);
+            OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+            queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
+            queryParameters.Add("@deleted", 0, OracleMappingType.Int64, ParameterDirection.Output);
+
+            string sql = $@"TariffPlan_Package.DeleteTariffPlan";
+            provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
+            int deleted = queryParameters.Get<int>("@deleted");
+            return deleted;
         }
 
         public void Dispose()

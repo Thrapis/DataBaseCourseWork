@@ -36,10 +36,25 @@ namespace MobileOperatorApplication.Data
 			generated += GenerateCalls(50000);
 			Console.WriteLine("Generation of Payments");
 			generated += GeneratePayments();
-			Console.WriteLine("Generation of Debits");
-			generated += GenerateDebits();
 
 			return generated;
+        }
+
+		public static int GetAllDataCount()
+        {
+			int count = 0;
+			count += new CallRepository().GetAll().Count();
+			count += new ClientRepository().GetAll().Count();
+			count += new ContractRepository().GetAll().Count();
+			count += new DebitRepository().GetAll().Count();
+			count += new EmployeeRepository().GetAll().Count();
+			count += new PaymentRepository().GetAll().Count();
+			count += new PhoneNumberRepository().GetAll().Count();
+			count += new PostRepository().GetAll().Count();
+			count += new ServiceDescriptionRepository().GetAll().Count();
+			count += new ServiceRepository().GetAll().Count();
+			count += new TariffPlanRepository().GetAll().Count();
+			return count;
         }
 
 		public static int GeneratePosts()
@@ -148,7 +163,7 @@ namespace MobileOperatorApplication.Data
 				" он находится прямо сейчас."));
 			inserted += repository.Insert(new ServiceDescription("Локатор", "Локатор — это простая возможность определения местоположения абонентов: твоих друзей и близких. Ты прямо сейчас можешь узнать," +
 				" где находятся твои друзья и близкие."));
-			inserted += repository.Insert(new ServiceDescription("Уроки английского", "ервис «Портал по изучению английского языка позволяет абонентам при помощи простого SMS-интерфейса, WAP-интерфейса," +
+			inserted += repository.Insert(new ServiceDescription("Уроки английского", "Сервис «Портал по изучению английского языка позволяет абонентам при помощи простого SMS-интерфейса, WAP-интерфейса," +
 				" а также приложения изучать английские слова, также абонентам предоставляется возможность изучение правил грамматики английского языка с помощью видеороликов на WAP-портале." +
 				" Чтобы воспользоваться сервисом, вам необходимо оформить подписку."));
 			inserted += repository.Insert(new ServiceDescription("Уроки русского", "Сервис «Уроки русского» поможет вам совершенствовать знания русского языка. Предусмотрена возможность использования" +
@@ -252,7 +267,7 @@ namespace MobileOperatorApplication.Data
 			if (tariff_plans.Count() == 0 || employees.Count() == 0 || clients.Count() == 0)
 				throw new Exception("Can't generate contracts");
 
-				Random rand = new Random();
+			Random rand = new Random();
 
 			for (int i = 0; i < count; i++)
 			{
@@ -291,7 +306,7 @@ namespace MobileOperatorApplication.Data
 
 				while (service_descriptions.Count < serv_count)
 				{
-					service_descriptions.Append(serviceDescriptions.ElementAt(rand.Next(0, serviceDescriptions.Count())).ID);
+					service_descriptions.Add(serviceDescriptions.ElementAt(rand.Next(0, serviceDescriptions.Count())).ID);
 				}
 
 				for (int j = 0; j < service_descriptions.Count; j++)
@@ -381,8 +396,9 @@ namespace MobileOperatorApplication.Data
 				Contract contract = contracts.ElementAt(rand.Next(0, contracts.Count()));
 
 				int contact_id = contract.ID;
-				DateTime talk_time = new DateTime(0, 0, rand.Next(0, 2), rand.Next(0, 24), rand.Next(0, 60), rand.Next(0, 60));
-				DateTime call_dateTime = contract.SIGNING_DATETIME.AddTicks(rand.Next(0, (int)(contract.SIGNING_DATETIME.Ticks - DateTime.Now.Ticks)));
+				TimeSpan talk_time = new TimeSpan(0, rand.Next(0, 24), rand.Next(0, 60), rand.Next(0, 60));
+				long ticks = (long)(rand.NextDouble() * (double)(DateTime.Now.Ticks - contract.SIGNING_DATETIME.Ticks));
+				DateTime call_dateTime = contract.SIGNING_DATETIME.AddTicks(ticks);
 
 				inserted += repository.Insert(new Call(contact_id, GetRandomPhoneNumber(rand), talk_time, call_dateTime));
 			}
@@ -390,7 +406,7 @@ namespace MobileOperatorApplication.Data
 			return inserted;
 		}
 
-		public static int GeneratePayments(int max_payments_count = 14, float min_payments = 2.5f, float max_payments = 140f)
+		public static int GeneratePayments(int max_payments_count = 6, float min_payments = 2.5f, float max_payments = 140f)
 		{
 			int inserted = 0;
 
@@ -405,6 +421,7 @@ namespace MobileOperatorApplication.Data
 
 			for (int i = 0; i < contracts.Count(); i++)
 			{
+				Console.WriteLine("Contract payments: " + i);
 				Contract contract = contracts.ElementAt(i);
 
 				int payments_count = rand.Next(1, max_payments_count);
@@ -412,40 +429,10 @@ namespace MobileOperatorApplication.Data
 				for (int j = 0; j < payments_count; j++)
                 {
 					float payment = (float)rand.NextDouble() * (max_payments - min_payments) + min_payments;
-					DateTime payment_datetime = contract.SIGNING_DATETIME.AddTicks((int)rand.Next(0, (int)(contract.SIGNING_DATETIME.Ticks - DateTime.Now.Ticks)));
+					long ticks = (long)(rand.NextDouble() * (double)(DateTime.Now.Ticks - contract.SIGNING_DATETIME.Ticks));
+					DateTime payment_datetime = contract.SIGNING_DATETIME.AddTicks(ticks);
 
 					inserted += repository.Insert(new Payment(contract.ID, payment, payment_datetime));
-				}
-			}
-
-			return inserted;
-		}
-
-		public static int GenerateDebits(int max_debits_count = 14, float min_debits = 2.5f, float max_debits = 140f)
-		{
-			int inserted = 0;
-
-			IEnumerable<Contract> contracts = new ContractRepository().GetAll();
-
-			if (contracts.Count() == 0)
-				throw new Exception("Can't generate calls");
-
-			DebitRepository repository = new DebitRepository();
-
-			Random rand = new Random();
-
-			for (int i = 0; i < contracts.Count(); i++)
-			{
-				Contract contract = contracts.ElementAt(i);
-
-				int debits_count = rand.Next(1, max_debits_count);
-
-				for (int j = 0; j < debits_count; j++)
-				{
-					float debit = (float)rand.NextDouble() * (max_debits - min_debits) + min_debits;
-					DateTime debit_datetime = contract.SIGNING_DATETIME.AddTicks((int)rand.Next(0, (int)(contract.SIGNING_DATETIME.Ticks - DateTime.Now.Ticks)));
-
-					inserted += repository.Insert(new Debit(contract.ID, debit, debit_datetime, ""));
 				}
 			}
 

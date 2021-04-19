@@ -7,6 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Dapper;
 using MobileOperatorApplication.Oracle;
+using Dapper.Oracle;
+using System.Data;
+using System.Globalization;
 
 namespace MobileOperatorApplication.Repository
 {
@@ -21,36 +24,63 @@ namespace MobileOperatorApplication.Repository
 
         public IEnumerable<Contract> GetAll()
         {
-            string sql = $"select * from Contract";
-            return provider.Connection.Query<Contract>(sql);
+            OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+            queryParameters.Add("@contract_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
+
+            string sql = $"Contract_Package.GetAllContracts";
+            return provider.Connection.Query<Contract>(sql, queryParameters, commandType: CommandType.StoredProcedure);
         }
 
         public Contract Get(int id)
         {
-            string sql = $"select * from Contract where id = {id}";
-            return provider.Connection.QueryFirst<Contract>(sql);
+            OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+            queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
+
+            string sql = $@"Contract_Package.GetContractById";
+            return provider.Connection.QueryFirst<Contract>(sql, queryParameters);
         }
 
         public int Insert(Contract item)
         {
-            string signing_datetime_format = $"TO_TIMESTAMP({item.SIGNING_DATETIME.ToString("yyyy-MM-dd HH:mm:ss")})";
+            OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+            queryParameters.Add("@par_tariff_id", item.TARIFF_ID, OracleMappingType.Int64, ParameterDirection.Input);
+            queryParameters.Add("@par_client_id", item.CLIENT_ID, OracleMappingType.Int64, ParameterDirection.Input);
+            queryParameters.Add("@par_employee_id", item.EMPLOYEE_ID, OracleMappingType.Int64, ParameterDirection.Input);
+            queryParameters.Add("@par_signing_datetime", item.SIGNING_DATETIME.ToString("yyyy-MM-dd HH:mm:ss"), OracleMappingType.NVarchar2, ParameterDirection.Input);
+            queryParameters.Add("@inserted", 0, OracleMappingType.Int64, ParameterDirection.Output);
 
-            string sql = $@"insert into Contract (Tariff_Id, Client_Id, Employee_Id, Signing_Datetime) values ({item.TARIFF_ID}, {item.CLIENT_ID}, {item.EMPLOYEE_ID}, {signing_datetime_format})";
-            return provider.Connection.Execute(sql);
+            string sql = $@"Contract_Package.InsertContract";
+            provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
+            int inserted = queryParameters.Get<int>("@inserted");
+            return inserted;
         }
 
         public int Update(Contract item)
         {
-            string signing_datetime_format = $"TO_TIMESTAMP({item.SIGNING_DATETIME.ToString("yyyy-MM-dd HH:mm:ss")})";
+            OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+            queryParameters.Add("@par_id", item.ID, OracleMappingType.Int64, ParameterDirection.Input);
+            queryParameters.Add("@par_tariff_id", item.TARIFF_ID, OracleMappingType.Int64, ParameterDirection.Input);
+            queryParameters.Add("@par_client_id", item.CLIENT_ID, OracleMappingType.Int64, ParameterDirection.Input);
+            queryParameters.Add("@par_employee_id", item.EMPLOYEE_ID, OracleMappingType.Int64, ParameterDirection.Input);
+            queryParameters.Add("@par_signing_datetime", item.SIGNING_DATETIME.ToString("yyyy-MM-dd HH:mm:ss"), OracleMappingType.NVarchar2, ParameterDirection.Input);
+            queryParameters.Add("@updated", 0, OracleMappingType.Int64, ParameterDirection.Output);
 
-            string sql = $@"update Contract set Tariff_Id = {item.TARIFF_ID}, Client_Id = {item.CLIENT_ID}, Employee_Id = {item.EMPLOYEE_ID}, Signing_Datetime = {signing_datetime_format} where Id = {item.ID}";
-            return provider.Connection.Execute(sql);
+            string sql = $@"Contract_Package.UpdateContract";
+            provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
+            int updated = queryParameters.Get<int>("@updated");
+            return updated;
         }
 
         public int Delete(int id)
         {
-            string sql = $"delete from Contract where Id = {id}";
-            return provider.Connection.Execute(sql);
+            OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+            queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
+            queryParameters.Add("@deleted", 0, OracleMappingType.Int64, ParameterDirection.Output);
+
+            string sql = $@"Contract_Package.DeleteContract";
+            provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
+            int deleted = queryParameters.Get<int>("@deleted");
+            return deleted;
         }
 
         public void Dispose()

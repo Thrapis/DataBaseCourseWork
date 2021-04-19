@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Dapper;
 using MobileOperatorApplication.Oracle;
+using Dapper.Oracle;
+using System.Data;
 
 namespace MobileOperatorApplication.Repository
 {
@@ -21,40 +23,63 @@ namespace MobileOperatorApplication.Repository
 
 		public IEnumerable<Call> GetAll()
 		{
-			string sql = $"select * from Call";
-			return provider.Connection.Query<Call>(sql);
+			OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+			queryParameters.Add("@call_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
+
+			string sql = $"Call_Package.GetAllCalls";
+			return provider.Connection.Query<Call>(sql, queryParameters, commandType: CommandType.StoredProcedure);
 		}
 
 		public Call Get(int id)
 		{
-			string sql = $"select * from Call where id = {id}";
-			return provider.Connection.QueryFirst<Call>(sql);
+			OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+			queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
+
+			string sql = $@"Call_Package.GetCallById";
+			return provider.Connection.QueryFirst<Call>(sql, queryParameters);
 		}
 
 		public int Insert(Call item)
 		{
-			string talk_time_format = $@"INTERVAL '{item.TALK_TIME.ToString("dd HH:mm:ss")}' DAY TO SECOND";
-			string call_datetime_format = $"TO_TIMESTAMP({item.CALL_DATETIME.ToString("yyyy-MM-dd HH:mm:ss")})";
+			OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+			queryParameters.Add("@par_contract_id", item.CONTRACT_ID, OracleMappingType.Int64, ParameterDirection.Input);
+			queryParameters.Add("@par_to_phone_number", item.TO_PHONE_NUMBER, OracleMappingType.NVarchar2, ParameterDirection.Input);
+			queryParameters.Add("@par_talk_time", item.TALK_TIME.ToString(@"dd\ hh\:mm\:ss"), OracleMappingType.NVarchar2, ParameterDirection.Input);
+			queryParameters.Add("@par_call_datetime", item.CALL_DATETIME.ToString("yyyy-MM-dd HH:mm:ss"), OracleMappingType.NVarchar2, ParameterDirection.Input);
+			queryParameters.Add("@inserted", 0, OracleMappingType.Int64, ParameterDirection.Output);
 
-			string sql = $@"insert into Call (Contract_Id, To_Phone_Number, Talk_Time, Call_Datetime)" +
-				$@" values ({item.CONTRACT_ID}, '{item.TO_PHONE_NUMBER}', {talk_time_format}, {call_datetime_format})";
-			return provider.Connection.Execute(sql);
+			string sql = $@"Call_Package.InsertCall";
+			provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
+			int inserted = queryParameters.Get<int>("@inserted");
+			return inserted;
 		}
 
 		public int Update(Call item)
 		{
-			string talk_time_format = $@"INTERVAL '{item.TALK_TIME.ToString("dd HH:mm:ss")}' DAY TO SECOND";
-			string call_datetime_format = $"TO_TIMESTAMP({item.CALL_DATETIME.ToString("yyyy-MM-dd HH:mm:ss")})";
+			OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+			queryParameters.Add("@par_id", item.ID, OracleMappingType.Int64, ParameterDirection.Input);
+			queryParameters.Add("@par_contract_id", item.CONTRACT_ID, OracleMappingType.Int64, ParameterDirection.Input);
+			queryParameters.Add("@par_to_phone_number", item.TO_PHONE_NUMBER, OracleMappingType.NVarchar2, ParameterDirection.Input);
+			queryParameters.Add("@par_talk_time", item.TALK_TIME.ToString(@"dd\ hh\:mm\:ss"), OracleMappingType.NVarchar2, ParameterDirection.Input);
+			queryParameters.Add("@par_call_datetime", item.CALL_DATETIME.ToString("yyyy-MM-dd HH:mm:ss"), OracleMappingType.NVarchar2, ParameterDirection.Input);
+			queryParameters.Add("@updated", 0, OracleMappingType.Int64, ParameterDirection.Output);
 
-			string sql = $@"update Call set Contract_Id = {item.CONTRACT_ID}, To_Phone_Number = '{item.TO_PHONE_NUMBER}'," + 
-				$@" Talk_Time = {talk_time_format}, Call_Datetime = {call_datetime_format} where Id = {item.ID}";
-			return provider.Connection.Execute(sql);
+			string sql = $@"Call_Package.UpdateCall";
+			provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
+			int updated = queryParameters.Get<int>("@updated");
+			return updated;
 		}
 
 		public int Delete(int id)
 		{
-			string sql = $"delete from Call where Id = {id}";
-			return provider.Connection.Execute(sql);
+			OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+			queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
+			queryParameters.Add("@deleted", 0, OracleMappingType.Int64, ParameterDirection.Output);
+
+			string sql = $@"Call_Package.DeleteCall";
+			provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
+			int deleted = queryParameters.Get<int>("@deleted");
+			return deleted;
 		}
 
 		public void Dispose()

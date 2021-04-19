@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Dapper;
 using MobileOperatorApplication.Oracle;
+using Dapper.Oracle;
+using System.Data;
 
 namespace MobileOperatorApplication.Repository
 {
@@ -21,38 +23,61 @@ namespace MobileOperatorApplication.Repository
 
 		public IEnumerable<Payment> GetAll()
 		{
-			string sql = $"select * from Payment";
-			return provider.Connection.Query<Payment>(sql);
+			OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+			queryParameters.Add("@payment_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
+
+			string sql = $"Payment_Package.GetAllPayments";
+			return provider.Connection.Query<Payment>(sql, queryParameters, commandType: CommandType.StoredProcedure);
 		}
 
 		public Payment Get(int id)
 		{
-			string sql = $"select * from Payment where id = {id}";
-			return provider.Connection.QueryFirst<Payment>(sql);
+			OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+			queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
+
+			string sql = $@"Payment_Package.GetPaymentById";
+			return provider.Connection.QueryFirst<Payment>(sql, queryParameters);
 		}
 
 		public int Insert(Payment item)
 		{
-			string payment_datetime_format = $"TO_TIMESTAMP({item.PAYMENT_DATETIME.ToString("yyyy-MM-dd HH:mm:ss")})";
+			OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+			queryParameters.Add("@par_contract_id", item.CONTRACT_ID, OracleMappingType.Int64, ParameterDirection.Input);
+			queryParameters.Add("@par_payment_amount", item.PAYMENT_AMOUNT, OracleMappingType.BinaryFloat, ParameterDirection.Input);
+			queryParameters.Add("@par_payment_datetime", item.PAYMENT_DATETIME.ToString("yyyy-MM-dd HH:mm:ss"), OracleMappingType.NVarchar2, ParameterDirection.Input);
+			queryParameters.Add("@inserted", 0, OracleMappingType.Int64, ParameterDirection.Output);
 
-			string sql = $@"insert into Payment (Contract_Id, Payment_Amount, Payment_Datetime)" +
-				$@" values ({item.CONTRACT_ID}, {item.PAYMENT_AMOUNT}, {payment_datetime_format})";
-			return provider.Connection.Execute(sql);
+			string sql = $@"Payment_Package.InsertPayment";
+			provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
+			int inserted = queryParameters.Get<int>("@inserted");
+			return inserted;
 		}
 
 		public int Update(Payment item)
 		{
-			string payment_datetime_format = $"TO_TIMESTAMP({item.PAYMENT_DATETIME.ToString("yyyy-MM-dd HH:mm:ss")})";
+			OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+			queryParameters.Add("@par_id", item.ID, OracleMappingType.Int64, ParameterDirection.Input);
+			queryParameters.Add("@par_contract_id", item.CONTRACT_ID, OracleMappingType.Int64, ParameterDirection.Input);
+			queryParameters.Add("@par_payment_amount", item.PAYMENT_AMOUNT, OracleMappingType.BinaryFloat, ParameterDirection.Input);
+			queryParameters.Add("@par_payment_datetime", item.PAYMENT_DATETIME.ToString("yyyy-MM-dd HH:mm:ss"), OracleMappingType.NVarchar2, ParameterDirection.Input);
+			queryParameters.Add("@updated", 0, OracleMappingType.Int64, ParameterDirection.Output);
 
-			string sql = $@"update Payment set Contract_Id = {item.CONTRACT_ID}, Payment_Amount = {item.PAYMENT_AMOUNT}," + 
-				$@" Payment_Datetime = {payment_datetime_format} where Id = {item.ID}";
-			return provider.Connection.Execute(sql);
+			string sql = $@"Payment_Package.UpdatePayment";
+			provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
+			int updated = queryParameters.Get<int>("@updated");
+			return updated;
 		}
 
 		public int Delete(int id)
 		{
-			string sql = $"delete from Payment where Id = {id}";
-			return provider.Connection.Execute(sql);
+			OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+			queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
+			queryParameters.Add("@deleted", 0, OracleMappingType.Int64, ParameterDirection.Output);
+
+			string sql = $@"Payment_Package.DeletePayment";
+			provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
+			int deleted = queryParameters.Get<int>("@deleted");
+			return deleted;
 		}
 
 		public void Dispose()

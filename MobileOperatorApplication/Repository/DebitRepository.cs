@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Dapper;
 using MobileOperatorApplication.Oracle;
+using Dapper.Oracle;
+using System.Data;
 
 namespace MobileOperatorApplication.Repository
 {
@@ -21,38 +23,63 @@ namespace MobileOperatorApplication.Repository
 
 		public IEnumerable<Debit> GetAll()
 		{
-			string sql = $"select * from Debit";
-			return provider.Connection.Query<Debit>(sql);
+			OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+			queryParameters.Add("@debit_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
+
+			string sql = $"Debit_Package.GetAllDebits";
+			return provider.Connection.Query<Debit>(sql, queryParameters, commandType: CommandType.StoredProcedure);
 		}
 
 		public Debit Get(int id)
 		{
-			string sql = $"select * from Debit where id = {id}";
-			return provider.Connection.QueryFirst<Debit>(sql);
+			OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+			queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
+
+			string sql = $@"Debit_Package.GetDebitById";
+			return provider.Connection.QueryFirst<Debit>(sql, queryParameters);
 		}
 
 		public int Insert(Debit item)
 		{
-			string debit_datetime_format = $"TO_TIMESTAMP({item.DEBIT_DATETIME.ToString("yyyy-MM-dd HH:mm:ss")})";
+			OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+			queryParameters.Add("@par_contract_id", item.CONTRACT_ID, OracleMappingType.Int64, ParameterDirection.Input);
+			queryParameters.Add("@par_debit_amount", item.DEBIT_AMOUNT, OracleMappingType.BinaryFloat, ParameterDirection.Input);
+			queryParameters.Add("@par_debit_datetime", item.DEBIT_DATETIME.ToString("yyyy-MM-dd HH:mm:ss"), OracleMappingType.NVarchar2, ParameterDirection.Input);
+			queryParameters.Add("@par_reason", item.REASON, OracleMappingType.NVarchar2, ParameterDirection.Input);
+			queryParameters.Add("@inserted", 0, OracleMappingType.Int64, ParameterDirection.Output);
 
-			string sql = $@"insert into Debit (Contract_Id, Debit_Amount, Debit_Datetime, Reason)" +
-				$@" values ({item.CONTRACT_ID}, {item.DEBIT_AMOUNT}, {debit_datetime_format}, '{item.REASON}')";
-			return provider.Connection.Execute(sql);
+			string sql = $@"Debit_Package.InsertDebit";
+			provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
+			int inserted = queryParameters.Get<int>("@inserted");
+			return inserted;
 		}
 
 		public int Update(Debit item)
 		{
-			string debit_datetime_format = $"TO_TIMESTAMP({item.DEBIT_DATETIME.ToString("yyyy-MM-dd HH:mm:ss")})";
+			OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+			queryParameters.Add("@par_id", item.ID, OracleMappingType.Int64, ParameterDirection.Input);
+			queryParameters.Add("@par_contract_id", item.CONTRACT_ID, OracleMappingType.Int64, ParameterDirection.Input);
+			queryParameters.Add("@par_debit_amount", item.DEBIT_AMOUNT, OracleMappingType.BinaryFloat, ParameterDirection.Input);
+			queryParameters.Add("@par_debit_datetime", item.DEBIT_DATETIME.ToString("yyyy-MM-dd HH:mm:ss"), OracleMappingType.NVarchar2, ParameterDirection.Input);
+			queryParameters.Add("@par_reason", item.REASON, OracleMappingType.NVarchar2, ParameterDirection.Input);
+			queryParameters.Add("@updated", 0, OracleMappingType.Int64, ParameterDirection.Output);
 
-			string sql = $@"update Debit set Contract_Id = {item.CONTRACT_ID}, Debit_Amount = {item.DEBIT_AMOUNT}," + 
-				$@" Debit_Datetime = {debit_datetime_format}, Reason = '{item.REASON}' where Id = {item.ID}";
-			return provider.Connection.Execute(sql);
+			string sql = $@"Debit_Package.UpdateDebit";
+			provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
+			int updated = queryParameters.Get<int>("@updated");
+			return updated;
 		}
 
 		public int Delete(int id)
 		{
-			string sql = $"delete from Debit where Id = {id}";
-			return provider.Connection.Execute(sql);
+			OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+			queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
+			queryParameters.Add("@deleted", 0, OracleMappingType.Int64, ParameterDirection.Output);
+
+			string sql = $@"Debit_Package.DeleteDebit";
+			provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
+			int deleted = queryParameters.Get<int>("@deleted");
+			return deleted;
 		}
 
 		public void Dispose()

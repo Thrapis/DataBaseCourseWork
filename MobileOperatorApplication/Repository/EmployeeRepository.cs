@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Dapper;
 using MobileOperatorApplication.Oracle;
+using Dapper.Oracle;
+using System.Data;
 
 namespace MobileOperatorApplication.Repository
 {
@@ -21,32 +23,61 @@ namespace MobileOperatorApplication.Repository
 
         public IEnumerable<Employee> GetAll()
         {
-            string sql = $"select * from Employee";
-            return provider.Connection.Query<Employee>(sql);
+            OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+            queryParameters.Add("@employee_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
+
+            string sql = $"Employee_Package.GetAllEmployees";
+            return provider.Connection.Query<Employee>(sql, queryParameters, commandType: CommandType.StoredProcedure);
         }
 
         public Employee Get(int id)
         {
-            string sql = $"select * from Employee where id = {id}";
-            return provider.Connection.QueryFirst<Employee>(sql);
+            OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+            queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
+
+            string sql = $@"Employee_Package.GetEmployeeById";
+            return provider.Connection.QueryFirst<Employee>(sql, queryParameters);
         }
 
         public int Insert(Employee item)
         {
-            string sql = $@"insert into Employee (Full_Name, Post_Id, Account_Login) values ('{item.FULL_NAME}', {item.POST_ID}, '{item.ACCOUNT_LOGIN}')";
-            return provider.Connection.Execute(sql);
+            OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+            queryParameters.Add("@par_full_name", item.FULL_NAME, OracleMappingType.NVarchar2, ParameterDirection.Input);
+            queryParameters.Add("@par_post_id", item.POST_ID, OracleMappingType.Int64, ParameterDirection.Input);
+            queryParameters.Add("@par_account_login", item.ACCOUNT_LOGIN, OracleMappingType.NVarchar2, ParameterDirection.Input);
+            queryParameters.Add("@inserted", 0, OracleMappingType.Int64, ParameterDirection.Output);
+
+            string sql = $@"Employee_Package.InsertEmployee";
+            provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
+            int inserted = queryParameters.Get<int>("@inserted");
+            return inserted;
         }
 
         public int Update(Employee item)
         {
-            string sql = $@"update Employee set Full_Name = '{item.FULL_NAME}', Post_Id = {item.POST_ID}, Account_Login = '{item.ACCOUNT_LOGIN}' where Id = {item.ID}";
-            return provider.Connection.Execute(sql);
+            OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+            queryParameters.Add("@par_id", item.ID, OracleMappingType.Int64, ParameterDirection.Input);
+            queryParameters.Add("@par_full_name", item.FULL_NAME, OracleMappingType.NVarchar2, ParameterDirection.Input);
+            queryParameters.Add("@par_post_id", item.POST_ID, OracleMappingType.Int64, ParameterDirection.Input);
+            queryParameters.Add("@par_account_login", item.ACCOUNT_LOGIN, OracleMappingType.NVarchar2, ParameterDirection.Input);
+            queryParameters.Add("@updated", 0, OracleMappingType.Int64, ParameterDirection.Output);
+
+            string sql = $@"Employee_Package.UpdateEmployee";
+            provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
+            int updated = queryParameters.Get<int>("@updated");
+            return updated;
         }
 
         public int Delete(int id)
         {
-            string sql = $"delete from Employee where Id = {id}";
-            return provider.Connection.Execute(sql);
+            OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+            queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
+            queryParameters.Add("@deleted", 0, OracleMappingType.Int64, ParameterDirection.Output);
+
+            string sql = $@"Employee_Package.DeleteEmployee";
+            provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
+            int deleted = queryParameters.Get<int>("@deleted");
+            return deleted;
         }
 
         public void Dispose()

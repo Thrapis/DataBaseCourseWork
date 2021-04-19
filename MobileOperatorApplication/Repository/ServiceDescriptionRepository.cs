@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Dapper;
 using MobileOperatorApplication.Oracle;
+using Dapper.Oracle;
+using System.Data;
 
 namespace MobileOperatorApplication.Repository
 {
@@ -21,32 +23,59 @@ namespace MobileOperatorApplication.Repository
 
         public IEnumerable<ServiceDescription> GetAll()
         {
-            string sql = $"select * from Service_Description";
-            return provider.Connection.Query<ServiceDescription>(sql);
+            OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+            queryParameters.Add("@service_desc_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
+
+            string sql = $"ServiceDescription_Package.GetAllServiceDescriptions";
+            return provider.Connection.Query<ServiceDescription>(sql, queryParameters, commandType: CommandType.StoredProcedure);
         }
 
         public ServiceDescription Get(int id)
         {
-            string sql = $"select * from Service_Description where id = {id}";
-            return provider.Connection.QueryFirst<ServiceDescription>(sql);
+            OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+            queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
+
+            string sql = $@"ServiceDescription_Package.GetServiceDescriptionById";
+            return provider.Connection.QueryFirst<ServiceDescription>(sql, queryParameters);
         }
 
         public int Insert(ServiceDescription item)
         {
-            string sql = $@"insert into Service_Description (Service_Name, Service_Description) values ('{item.SERVICE_NAME}', '{item.SERVICE_DESCRIPTION}')";
-            return provider.Connection.Execute(sql);
+            OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+            queryParameters.Add("@par_service_name", item.SERVICE_NAME, OracleMappingType.NVarchar2, ParameterDirection.Input);
+            queryParameters.Add("@par_service_description", item.SERVICE_DESCRIPTION, OracleMappingType.NVarchar2, ParameterDirection.Input);
+            queryParameters.Add("@inserted", 0, OracleMappingType.Int64, ParameterDirection.Output);
+
+            string sql = $@"ServiceDescription_Package.InsertServiceDescription";
+            provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
+            int inserted = queryParameters.Get<int>("@inserted");
+            return inserted;
         }
 
         public int Update(ServiceDescription item)
         {
-            string sql = $@"update Service_Description set Service_Name = '{item.SERVICE_NAME}', Service_Description = '{item.SERVICE_DESCRIPTION}' where Id = {item.ID}";
-            return provider.Connection.Execute(sql);
+            OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+            queryParameters.Add("@par_id", item.ID, OracleMappingType.Int64, ParameterDirection.Input);
+            queryParameters.Add("@par_service_name", item.SERVICE_NAME, OracleMappingType.NVarchar2, ParameterDirection.Input);
+            queryParameters.Add("@par_service_description", item.SERVICE_DESCRIPTION, OracleMappingType.NVarchar2, ParameterDirection.Input);
+            queryParameters.Add("@updated", 0, OracleMappingType.Int64, ParameterDirection.Output);
+
+            string sql = $@"ServiceDescription_Package.UpdateServiceDescription";
+            provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
+            int updated = queryParameters.Get<int>("@updated");
+            return updated;
         }
 
         public int Delete(int id)
         {
-            string sql = $"delete from Service_Description where Id = {id}";
-            return provider.Connection.Execute(sql);
+            OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+            queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
+            queryParameters.Add("@deleted", 0, OracleMappingType.Int64, ParameterDirection.Output);
+
+            string sql = $@"ServiceDescription_Package.DeleteServiceDescription";
+            provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
+            int deleted = queryParameters.Get<int>("@deleted");
+            return deleted;
         }
 
         public void Dispose()

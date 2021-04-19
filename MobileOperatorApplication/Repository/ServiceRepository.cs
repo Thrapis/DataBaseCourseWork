@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Dapper;
 using MobileOperatorApplication.Oracle;
+using Dapper.Oracle;
+using System.Data;
 
 namespace MobileOperatorApplication.Repository
 {
@@ -21,40 +23,65 @@ namespace MobileOperatorApplication.Repository
 
 		public IEnumerable<Service> GetAll()
 		{
-			string sql = $"select * from Service";
-			return provider.Connection.Query<Service>(sql);
+			OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+			queryParameters.Add("@service_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
+
+			string sql = $"Service_Package.GetAllServices";
+			return provider.Connection.Query<Service>(sql, queryParameters, commandType: CommandType.StoredProcedure);
 		}
 
 		public Service Get(int id)
 		{
-			string sql = $"select * from Service where id = {id}";
-			return provider.Connection.QueryFirst<Service>(sql);
+			OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+			queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
+
+			string sql = $@"Service_Package.GetServiceById";
+			return provider.Connection.QueryFirst<Service>(sql, queryParameters);
 		}
 
 		public int Insert(Service item)
 		{
-			string connection_date_format = $"TO_TIMESTAMP({item.CONNECTION_DATE.ToString("yyyy-MM-dd HH:mm:ss")})";
-			string disconnection_date_format = $"TO_TIMESTAMP({item.DISCONNECTION_DATE.ToString("yyyy-MM-dd HH:mm:ss")})";
+			OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+			queryParameters.Add("@par_contract_id", item.CONTRACT_ID, OracleMappingType.Int64, ParameterDirection.Input);
+			queryParameters.Add("@par_description_id", item.DESCRIPTION_ID, OracleMappingType.Int64, ParameterDirection.Input);
+			queryParameters.Add("@par_service_amount", item.SERVICE_AMOUNT, OracleMappingType.BinaryFloat, ParameterDirection.Input);
+			queryParameters.Add("@par_connection_date", item.CONNECTION_DATE.ToString("yyyy-MM-dd HH:mm:ss"), OracleMappingType.NVarchar2, ParameterDirection.Input);
+			queryParameters.Add("@par_disconnection_date", item.DISCONNECTION_DATE.ToString("yyyy-MM-dd HH:mm:ss"), OracleMappingType.NVarchar2, ParameterDirection.Input);
+			queryParameters.Add("@inserted", 0, OracleMappingType.Int64, ParameterDirection.Output);
 
-			string sql = $@"insert into Service (Contract_Id, Description_Id, Service_Amount, Connection_Date, Disconnection_Date)" +
-				$@" values ({item.CONTRACT_ID}, {item.DESCRIPTION_ID}, {item.SERVICE_AMOUNT}, {connection_date_format}, {disconnection_date_format})";
-			return provider.Connection.Execute(sql);
+			string sql = $@"Service_Package.InsertService";
+			provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
+			int inserted = queryParameters.Get<int>("@inserted");
+			return inserted;
 		}
 
 		public int Update(Service item)
 		{
-			string connection_date_format = $"TO_TIMESTAMP({item.CONNECTION_DATE.ToString("yyyy-MM-dd HH:mm:ss")})";
-			string disconnection_date_format = $"TO_TIMESTAMP({item.DISCONNECTION_DATE.ToString("yyyy-MM-dd HH:mm:ss")})";
+			OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+			queryParameters.Add("@par_id", item.ID, OracleMappingType.Int64, ParameterDirection.Input);
+			queryParameters.Add("@par_contract_id", item.CONTRACT_ID, OracleMappingType.Int64, ParameterDirection.Input);
+			queryParameters.Add("@par_description_id", item.DESCRIPTION_ID, OracleMappingType.Int64, ParameterDirection.Input);
+			queryParameters.Add("@par_service_amount", item.SERVICE_AMOUNT, OracleMappingType.BinaryFloat, ParameterDirection.Input);
+			queryParameters.Add("@par_connection_date", item.CONNECTION_DATE.ToString("yyyy-MM-dd HH:mm:ss"), OracleMappingType.NVarchar2, ParameterDirection.Input);
+			queryParameters.Add("@par_disconnection_date", item.DISCONNECTION_DATE.ToString("yyyy-MM-dd HH:mm:ss"), OracleMappingType.NVarchar2, ParameterDirection.Input);
+			queryParameters.Add("@updated", 0, OracleMappingType.Int64, ParameterDirection.Output);
 
-			string sql = $@"update Service set Contract_Id = {item.CONTRACT_ID}, Description_Id = {item.DESCRIPTION_ID}," + 
-				$@" Service_Amount = {item.SERVICE_AMOUNT}, Connection_Date = {connection_date_format}, Disconnection_Date = {disconnection_date_format} where Id = {item.ID}";
-			return provider.Connection.Execute(sql);
+			string sql = $@"Service_Package.UpdateService";
+			provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
+			int updated = queryParameters.Get<int>("@updated");
+			return updated;
 		}
 
 		public int Delete(int id)
 		{
-			string sql = $"delete from Service where Id = {id}";
-			return provider.Connection.Execute(sql);
+			OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+			queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
+			queryParameters.Add("@deleted", 0, OracleMappingType.Int64, ParameterDirection.Output);
+
+			string sql = $@"Service_Package.DeleteService";
+			provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
+			int deleted = queryParameters.Get<int>("@deleted");
+			return deleted;
 		}
 
 		public void Dispose()
