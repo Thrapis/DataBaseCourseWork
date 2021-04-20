@@ -65,6 +65,18 @@ namespace MobileOperatorApplication.Oracle
             }
         }
 
+        public float GetContractBalance(int id)
+        {
+            OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+            queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
+            queryParameters.Add("@balance", 0, OracleMappingType.BinaryFloat, ParameterDirection.Output);
+
+            string sql = $@"Contract_Package.GetContractBalance";
+            Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
+            float balance = queryParameters.Get<float>("@balance");
+            return balance;
+        }
+
         public IEnumerable<Post> GetPosts()
         {
             return Connection.Query<Post>("select * from POST");
