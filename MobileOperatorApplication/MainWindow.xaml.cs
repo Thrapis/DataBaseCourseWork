@@ -29,6 +29,8 @@ namespace MobileOperatorApplication
         {
             InitializeComponent();
 
+            Console.WriteLine(new OracleProvider().GetAccount("raeann_tzederbaum", "12345"));
+
             //Console.WriteLine(DataGeneration.GetAllDataCount());
         }
     }

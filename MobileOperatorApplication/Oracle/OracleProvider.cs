@@ -48,12 +48,12 @@ namespace MobileOperatorApplication.Oracle
             OracleDynamicParameters queryParameters = new OracleDynamicParameters();
             queryParameters.Add("@par_username", login, OracleMappingType.NVarchar2, ParameterDirection.InputOutput);
             queryParameters.Add("@par_password", password, OracleMappingType.NVarchar2, ParameterDirection.Input);
-            queryParameters.Add("@access_level", -999, OracleMappingType.Int32, ParameterDirection.Output);
+            queryParameters.Add("@ret_access_level", -999, OracleMappingType.Int32, ParameterDirection.Output);
 
             string sql = $@"Account_Package.GetAccount";
             Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
             string outlogin = queryParameters.Get<string>("@par_username"); ;
-            int access_level = queryParameters.Get<int>("@access_level");
+            int access_level = queryParameters.Get<int>("@ret_access_level");
             
             if (outlogin == login && access_level > 0)
             {
