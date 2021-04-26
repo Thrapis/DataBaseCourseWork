@@ -29,9 +29,14 @@ namespace MobileOperatorApplication
         {
             InitializeComponent();
 
-            Console.WriteLine(new OracleProvider().GetAccount("raeann_tzederbaum", "12345"));
+            IEnumerable<Service> services = new ClientRepository().GetAllServices(6);
 
-            //Console.WriteLine(DataGeneration.GetAllDataCount());
+            foreach (var serv in services)
+            {
+                Console.WriteLine(serv);
+            }
+
+            //Console.WriteLine(DataGeneration.GenerateAllData());
         }
     }
 }

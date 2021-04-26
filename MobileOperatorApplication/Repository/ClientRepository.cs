@@ -80,6 +80,37 @@ namespace MobileOperatorApplication.Repository
             return deleted;
         }
 
+        public IEnumerable<Service> GetAllServices(int id)
+        {
+            OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+            queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
+            queryParameters.Add("@service_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
+
+            string sql = $"Client_Package.GetAllServicesByClientId";
+            return provider.Connection.Query<Service>(sql, queryParameters, commandType: CommandType.StoredProcedure);
+        }
+
+        public IEnumerable<Contract> GetAllContracts(int id)
+        {
+            OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+            queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
+            queryParameters.Add("@contract_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
+
+            string sql = $"Client_Package.GetAllContractsByClientId";
+            return provider.Connection.Query<Contract>(sql, queryParameters, commandType: CommandType.StoredProcedure);
+        }
+
+        public IEnumerable<TariffPlan> GetTariffRecommendations(int id, int recommendations_count)
+        {
+            OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+            queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
+            queryParameters.Add("@par_recommendations_count", recommendations_count, OracleMappingType.Int64, ParameterDirection.Input);
+            queryParameters.Add("@tariff_plan_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
+
+            string sql = $"Client_Package.GetTariffRecommendationsByClientId";
+            return provider.Connection.Query<TariffPlan>(sql, queryParameters, commandType: CommandType.StoredProcedure);
+        }
+
         public void Dispose()
         {
             provider.Connection.Close();

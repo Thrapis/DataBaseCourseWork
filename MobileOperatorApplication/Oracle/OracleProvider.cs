@@ -65,17 +65,21 @@ namespace MobileOperatorApplication.Oracle
             }
         }
 
-        public float GetContractBalance(int id)
+        public int ChangeAccountPassword(string login, string old_password, string new_password)
         {
             OracleDynamicParameters queryParameters = new OracleDynamicParameters();
-            queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
-            queryParameters.Add("@balance", 0, OracleMappingType.BinaryFloat, ParameterDirection.Output);
+            queryParameters.Add("@par_username", login, OracleMappingType.NVarchar2, ParameterDirection.Input);
+            queryParameters.Add("@par_old_password", old_password, OracleMappingType.NVarchar2, ParameterDirection.Input);
+            queryParameters.Add("@par_new_password", new_password, OracleMappingType.NVarchar2, ParameterDirection.Input);
+            queryParameters.Add("@changed", 0, OracleMappingType.Int32, ParameterDirection.Output);
 
-            string sql = $@"Contract_Package.GetContractBalance";
+            string sql = $@"Account_Package.ChangeAccountPassword";
             Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
-            float balance = queryParameters.Get<float>("@balance");
-            return balance;
+            int changed = queryParameters.Get<int>("@changed");
+            return changed;
         }
+
+        
 
         public IEnumerable<Post> GetPosts()
         {
