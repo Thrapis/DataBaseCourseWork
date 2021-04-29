@@ -21,6 +21,11 @@ namespace MobileOperatorApplication.Repository
             this.provider = new OracleProvider();
         }
 
+        public TariffPlanRepository(OracleProvider oracleProvider)
+        {
+            this.provider = oracleProvider;
+        }
+
         public IEnumerable<TariffPlan> GetAll()
         {
             OracleDynamicParameters queryParameters = new OracleDynamicParameters();
@@ -34,9 +39,10 @@ namespace MobileOperatorApplication.Repository
         {
             OracleDynamicParameters queryParameters = new OracleDynamicParameters();
             queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
+            queryParameters.Add("@tariff_plan_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
             string sql = $@"TariffPlan_Package.GetTariffPlanById";
-            return provider.Connection.QueryFirst<TariffPlan>(sql, queryParameters);
+            return provider.Connection.QueryFirst<TariffPlan>(sql, queryParameters, commandType: CommandType.StoredProcedure);
         }
 
         public int Insert(TariffPlan item)

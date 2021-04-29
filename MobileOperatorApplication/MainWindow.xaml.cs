@@ -1,6 +1,7 @@
 ﻿using MobileOperatorApplication.Data;
 using MobileOperatorApplication.Model;
 using MobileOperatorApplication.Oracle;
+using MobileOperatorApplication.Pages;
 using MobileOperatorApplication.Repository;
 using System;
 using System.Collections.Generic;
@@ -25,18 +26,50 @@ namespace MobileOperatorApplication
     /// </summary>
     public partial class MainWindow : Window
     {
+        OracleProvider Provider;
+        AccountInfo Account;
+        Client Client;
+
         public MainWindow()
         {
             InitializeComponent();
 
-            IEnumerable<Service> services = new ClientRepository().GetAllServices(6);
+            Provider = new OracleProvider();
 
-            foreach (var serv in services)
+           // ContractRepository contractRepository = new ContractRepository(Provider);
+
+            //Console.WriteLine(contractRepository.Get(1));
+
+            /*ClientRepository repository = new ClientRepository();
+
+            for (int i = 0; i < 100; i++)
             {
-                Console.WriteLine(serv);
-            }
+                IEnumerable<TariffPlan> tariffPlans = repository.GetTariffRecommendations(i, 10);
+                Console.WriteLine("Client " + i + ": " + tariffPlans.Count());
+            }*/
 
-            //Console.WriteLine(DataGeneration.GenerateAllData());
+            OpenLoginPage();
+        }
+
+        public void OpenLoginPage()
+        {
+            Main.Content = new LoginPage(Provider);
+        }
+        public void CloseLoginPage(AccountInfo account)
+        {
+            Account = account;
+            ClientRepository clientRepository = new ClientRepository(Provider);
+            Client = clientRepository.Get(Account.LOGIN);
+            Main.Content = null;
+        }
+
+        public void OpenAccountPage(object sender, EventArgs e)
+        {
+            Main.Content = new AccountPage();
+        }
+        public void OpenContractsPage(object sender, EventArgs e)
+        {
+            Main.Content = new ContractsPage(Provider, Client);
         }
     }
 }

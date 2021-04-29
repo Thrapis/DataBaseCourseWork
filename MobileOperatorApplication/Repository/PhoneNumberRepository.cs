@@ -21,6 +21,11 @@ namespace MobileOperatorApplication.Repository
             this.provider = new OracleProvider();
         }
 
+        public PhoneNumberRepository(OracleProvider oracleProvider)
+        {
+            this.provider = oracleProvider;
+        }
+
         public IEnumerable<PhoneNumber> GetAll()
         {
             OracleDynamicParameters queryParameters = new OracleDynamicParameters();
@@ -34,9 +39,10 @@ namespace MobileOperatorApplication.Repository
         {
             OracleDynamicParameters queryParameters = new OracleDynamicParameters();
             queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
+            queryParameters.Add("@phone_number_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
             string sql = $@"PhoneNumber_Package.GetPhoneNumberById";
-            return provider.Connection.QueryFirst<PhoneNumber>(sql, queryParameters);
+            return provider.Connection.QueryFirst<PhoneNumber>(sql, queryParameters, commandType: CommandType.StoredProcedure);
         }
 
         public int Insert(PhoneNumber item)

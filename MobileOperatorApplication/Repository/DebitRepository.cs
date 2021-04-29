@@ -21,6 +21,11 @@ namespace MobileOperatorApplication.Repository
 			this.provider = new OracleProvider();
 		}
 
+		public DebitRepository(OracleProvider oracleProvider)
+		{
+			this.provider = oracleProvider;
+		}
+
 		public IEnumerable<Debit> GetAll()
 		{
 			OracleDynamicParameters queryParameters = new OracleDynamicParameters();
@@ -34,9 +39,10 @@ namespace MobileOperatorApplication.Repository
 		{
 			OracleDynamicParameters queryParameters = new OracleDynamicParameters();
 			queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
+			queryParameters.Add("@debit_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
 			string sql = $@"Debit_Package.GetDebitById";
-			return provider.Connection.QueryFirst<Debit>(sql, queryParameters);
+			return provider.Connection.QueryFirst<Debit>(sql, queryParameters, commandType: CommandType.StoredProcedure);
 		}
 
 		public int Insert(Debit item)

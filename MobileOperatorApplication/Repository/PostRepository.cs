@@ -21,6 +21,11 @@ namespace MobileOperatorApplication.Repository
             this.provider = new OracleProvider();
         }
 
+        public PostRepository(OracleProvider oracleProvider)
+        {
+            this.provider = oracleProvider;
+        }
+
         public IEnumerable<Post> GetAll()
         {
             OracleDynamicParameters queryParameters = new OracleDynamicParameters();
@@ -34,9 +39,10 @@ namespace MobileOperatorApplication.Repository
         {
             OracleDynamicParameters queryParameters = new OracleDynamicParameters();
             queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
+            queryParameters.Add("@post_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
             string sql = $@"Post_Package.GetPostById";
-            return provider.Connection.QueryFirst<Post>(sql, queryParameters);
+            return provider.Connection.QueryFirst<Post>(sql, queryParameters, commandType: CommandType.StoredProcedure);
         }
 
         public int Insert(Post item)

@@ -5,11 +5,33 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MobileOperatorApplication"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800" ResizeMode="NoResize">
     <Grid>
-        <TextBox HorizontalAlignment="Left" Height="40"
-                 Margin="377,207,0,0" TextWrapping="Wrap" FontSize="24"
-                 Text="Hello, World!" VerticalAlignment="Top" Width="240"/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.5*"></ColumnDefinition>
+                <ColumnDefinition Width="8*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
 
+            <Border Background="Crimson" Grid.Column="0">
+                <StackPanel>
+                    <Button Height="50" Foreground="White" Background="Crimson" BorderBrush="DarkRed" BorderThickness="3" Click="OpenAccountPage">
+                        <TextBlock Text="Account" TextAlignment="Center"
+                                   TextWrapping="Wrap" FontFamily="Unispace" FontSize="18" FontWeight="Bold" TextDecorations="{x:Null}"/>
+                    </Button>
+                    <Button Height="50" Foreground="White" Background="Crimson" BorderBrush="DarkRed" BorderThickness="3" Click="OpenContractsPage">
+                        <TextBlock Text="Contracts" TextAlignment="Center"
+                                   TextWrapping="Wrap" FontFamily="Unispace" FontSize="18" FontWeight="Bold" TextDecorations="{x:Null}"/>
+                    </Button>
+                </StackPanel>
+            </Border>
+
+            <Border BorderBrush="DarkRed" Background="MintCream" BorderThickness="0 0 1 0" Grid.Column="1">
+                
+            </Border>
+        </Grid>
+
+        <Frame x:Name="Main" NavigationUIVisibility="Hidden"></Frame>
     </Grid>
+    
 </Window>

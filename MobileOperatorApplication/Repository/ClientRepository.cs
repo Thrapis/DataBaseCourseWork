@@ -21,6 +21,11 @@ namespace MobileOperatorApplication.Repository
             this.provider = new OracleProvider();
         }
 
+        public ClientRepository(OracleProvider oracleProvider)
+        {
+            this.provider = oracleProvider;
+        }
+
         public IEnumerable<Client> GetAll()
         {
             OracleDynamicParameters queryParameters = new OracleDynamicParameters();
@@ -34,9 +39,20 @@ namespace MobileOperatorApplication.Repository
         {
             OracleDynamicParameters queryParameters = new OracleDynamicParameters();
             queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
+            queryParameters.Add("@client_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
             string sql = $@"Client_Package.GetClientById";
-            return provider.Connection.QueryFirst<Client>(sql, queryParameters);
+            return provider.Connection.QueryFirst<Client>(sql, queryParameters, commandType: CommandType.StoredProcedure);
+        }
+
+        public Client Get(string login)
+        {
+            OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+            queryParameters.Add("@par_login", login, OracleMappingType.NVarchar2, ParameterDirection.Input);
+            queryParameters.Add("@client_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
+
+            string sql = $@"Client_Package.GetClientByLogin";
+            return provider.Connection.QueryFirst<Client>(sql, queryParameters, commandType: CommandType.StoredProcedure);
         }
 
         public int Insert(Client item)

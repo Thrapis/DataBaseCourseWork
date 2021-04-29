@@ -1,0 +1,29 @@
+﻿<Page x:Class="Transport_Assistant.LoginPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Transport_Assistant"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="LoginPage">
+
+    <Grid>
+        <Grid.Background >
+            <SolidColorBrush Color="Black" Opacity="0.4"></SolidColorBrush>
+        </Grid.Background>
+        <Border BorderThickness="0" CornerRadius="10" Background="WhiteSmoke" Opacity="1" Width="400" Height="300">
+            <Grid >
+                <TextBlock Text="Вход" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-220,0,0" FontSize="20"/>
+                <TextBlock x:Name="Message" Text="" Foreground="Red" TextWrapping="Wrap" Width="160"
+                       HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-140,0,0" FontSize="12"/>
+                <TextBlock Text="Логин" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-230,-60,0,0" FontSize="20"/>
+                <TextBox x:Name="Login" MaxLength="26" Text="Admin" Width="200" Height="30" FontSize="18" Margin="100,-60,0,0" KeyDown="EnterApplication"/>
+                <TextBlock Text="Пароль" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-220,40,0,0" FontSize="20"/>
+                <PasswordBox x:Name="Password" PasswordChar="*" MaxLength="26" Width="200" Height="30" FontSize="18" Margin="100,40,0,0" KeyDown="EnterApplication"/>
+                <Button Content="Регистрация" Width="120" Height="40" Margin="-150,200,0,0" Click="RegistrationPage"/>
+                <Button x:Name="EnterButton" Content="Вход" Width="120" Height="40" Margin="150,200,0,0" Click="EnterApplication"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Page>

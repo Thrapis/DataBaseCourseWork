@@ -21,6 +21,11 @@ namespace MobileOperatorApplication.Repository
 			this.provider = new OracleProvider();
 		}
 
+		public CallRepository(OracleProvider oracleProvider)
+		{
+			this.provider = oracleProvider;
+		}
+
 		public IEnumerable<Call> GetAll()
 		{
 			OracleDynamicParameters queryParameters = new OracleDynamicParameters();
@@ -34,9 +39,10 @@ namespace MobileOperatorApplication.Repository
 		{
 			OracleDynamicParameters queryParameters = new OracleDynamicParameters();
 			queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
+			queryParameters.Add("@call_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
 			string sql = $@"Call_Package.GetCallById";
-			return provider.Connection.QueryFirst<Call>(sql, queryParameters);
+			return provider.Connection.QueryFirst<Call>(sql, queryParameters, commandType: CommandType.StoredProcedure);
 		}
 
 		public int Insert(Call item)

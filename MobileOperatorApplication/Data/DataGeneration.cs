@@ -29,7 +29,7 @@ namespace MobileOperatorApplication.Data
 			Console.WriteLine("Generation of Contracts");
 			generated += GenerateContracts(12000);
 			Console.WriteLine("Generation of Services");
-			generated += GenerateServices();
+			generated += GenerateServices(0, 7);
 			Console.WriteLine("Generation of Phone Numbers");
 			generated += GeneratePhoneNumbers();
 			Console.WriteLine("Generation of Calls");

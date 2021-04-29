@@ -22,6 +22,11 @@ namespace MobileOperatorApplication.Repository
 			this.provider = new OracleProvider();
 		}
 
+		public ContractRepository(OracleProvider oracleProvider)
+		{
+			this.provider = oracleProvider;
+		}
+
 		public IEnumerable<Contract> GetAll()
 		{
 			OracleDynamicParameters queryParameters = new OracleDynamicParameters();
@@ -35,9 +40,10 @@ namespace MobileOperatorApplication.Repository
 		{
 			OracleDynamicParameters queryParameters = new OracleDynamicParameters();
 			queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
+			queryParameters.Add("@contract_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
 			string sql = $@"Contract_Package.GetContractById";
-			return provider.Connection.QueryFirst<Contract>(sql, queryParameters);
+			return provider.Connection.QueryFirst<Contract>(sql, queryParameters, commandType: CommandType.StoredProcedure);
 		}
 
 		public int Insert(Contract item)
