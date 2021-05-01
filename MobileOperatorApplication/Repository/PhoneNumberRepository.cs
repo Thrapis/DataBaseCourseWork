@@ -42,7 +42,17 @@ namespace MobileOperatorApplication.Repository
             queryParameters.Add("@phone_number_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
             string sql = $@"PhoneNumber_Package.GetPhoneNumberById";
-            return provider.Connection.QueryFirst<PhoneNumber>(sql, queryParameters, commandType: CommandType.StoredProcedure);
+            return provider.Connection.QueryFirstOrDefault<PhoneNumber>(sql, queryParameters, commandType: CommandType.StoredProcedure);
+        }
+
+        public PhoneNumber Get(string phone_number)
+        {
+            OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+            queryParameters.Add("@par_number", phone_number, OracleMappingType.NVarchar2, ParameterDirection.Input);
+            queryParameters.Add("@phone_number_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
+
+            string sql = $@"PhoneNumber_Package.GetPhoneNumberByNumber";
+            return provider.Connection.QueryFirstOrDefault<PhoneNumber>(sql, queryParameters, commandType: CommandType.StoredProcedure);
         }
 
         public int Insert(PhoneNumber item)

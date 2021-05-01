@@ -42,7 +42,7 @@ namespace MobileOperatorApplication.Repository
             queryParameters.Add("@tariff_plan_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
             string sql = $@"TariffPlan_Package.GetTariffPlanById";
-            return provider.Connection.QueryFirst<TariffPlan>(sql, queryParameters, commandType: CommandType.StoredProcedure);
+            return provider.Connection.QueryFirstOrDefault<TariffPlan>(sql, queryParameters, commandType: CommandType.StoredProcedure);
         }
 
         public int Insert(TariffPlan item)

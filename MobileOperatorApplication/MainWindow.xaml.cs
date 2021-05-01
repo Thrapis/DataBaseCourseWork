@@ -36,9 +36,9 @@ namespace MobileOperatorApplication
 
             Provider = new OracleProvider();
 
-           // ContractRepository contractRepository = new ContractRepository(Provider);
+            //ContractRepository contractRepository = new ContractRepository(Provider);
 
-            //Console.WriteLine(contractRepository.Get(1));
+            //Console.WriteLine(contractRepository.Get(95));
 
             /*ClientRepository repository = new ClientRepository();
 
@@ -53,23 +53,69 @@ namespace MobileOperatorApplication
 
         public void OpenLoginPage()
         {
-            Main.Content = new LoginPage(Provider);
+            Overlay.Content = new LoginPage(Provider);
         }
-        public void CloseLoginPage(AccountInfo account)
+        public void CloseLoginPage(AccountInfo account, Client client)
         {
             Account = account;
-            ClientRepository clientRepository = new ClientRepository(Provider);
-            Client = clientRepository.Get(Account.LOGIN);
-            Main.Content = null;
+            Client = client;
+            Overlay.Content = null;
+            OpenAccountPage(null, null);
         }
+        public void OpenPaymentForContractPage(Contract contract)
+        {
+            Overlay.Content = new PaymentForContractPage(Provider, contract);
+        }
+        public void ClosePaymentForContractPage()
+        {
+            Overlay.Content = null; 
+        }
+        public void OpenExecuteContractPage()
+        {
+            Overlay.Content = new ExecuteСontractPage(Provider, Client);
+        }
+        public void OpenExecuteContractPage(TariffPlan tariffPlan)
+        {
+            Overlay.Content = new ExecuteСontractPage(Provider, Client, tariffPlan);
+        }
+        public void CloseExecuteContractPage()
+        {
+            Overlay.Content = null;
+        }
+        public void OpenExecuteServicePage()
+        {
+            Overlay.Content = new ExecuteServicePage(Provider, Client);
+        }
+        public void OpenExecuteServicePage(Contract contract, ServiceDescription serviceDescription)
+        {
+            Overlay.Content = new ExecuteServicePage(Provider, Client, contract, serviceDescription);
+        }
+        public void CloseExecuteServicePage()
+        {
+            Overlay.Content = null;
+        }
+
+
 
         public void OpenAccountPage(object sender, EventArgs e)
         {
-            Main.Content = new AccountPage();
+            Main.Content = new AccountPage(Provider, Client);
         }
         public void OpenContractsPage(object sender, EventArgs e)
         {
             Main.Content = new ContractsPage(Provider, Client);
+        }
+        public void OpenServicesPage(object sender, EventArgs e)
+        {
+            Main.Content = new ServicesPage(Provider, Client);
+        }
+        public void OpenRecommendationsPage(object sender, EventArgs e)
+        {
+            Main.Content = new RecommendationsPage(Provider, Client);
+        }
+        public void OpenPhoneNumbersPage(object sender, EventArgs e)
+        {
+            Main.Content = new PhoneNumbersPage(Provider, Client);
         }
     }
 }

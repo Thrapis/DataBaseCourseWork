@@ -42,7 +42,7 @@ namespace MobileOperatorApplication.Repository
             queryParameters.Add("@post_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
             string sql = $@"Post_Package.GetPostById";
-            return provider.Connection.QueryFirst<Post>(sql, queryParameters, commandType: CommandType.StoredProcedure);
+            return provider.Connection.QueryFirstOrDefault<Post>(sql, queryParameters, commandType: CommandType.StoredProcedure);
         }
 
         public int Insert(Post item)

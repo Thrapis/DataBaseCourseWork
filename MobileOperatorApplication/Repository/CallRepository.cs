@@ -42,7 +42,7 @@ namespace MobileOperatorApplication.Repository
 			queryParameters.Add("@call_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
 			string sql = $@"Call_Package.GetCallById";
-			return provider.Connection.QueryFirst<Call>(sql, queryParameters, commandType: CommandType.StoredProcedure);
+			return provider.Connection.QueryFirstOrDefault<Call>(sql, queryParameters, commandType: CommandType.StoredProcedure);
 		}
 
 		public int Insert(Call item)

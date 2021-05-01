@@ -42,7 +42,7 @@ namespace MobileOperatorApplication.Repository
             queryParameters.Add("@client_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
             string sql = $@"Client_Package.GetClientById";
-            return provider.Connection.QueryFirst<Client>(sql, queryParameters, commandType: CommandType.StoredProcedure);
+            return provider.Connection.QueryFirstOrDefault<Client>(sql, queryParameters, commandType: CommandType.StoredProcedure);
         }
 
         public Client Get(string login)
@@ -52,7 +52,7 @@ namespace MobileOperatorApplication.Repository
             queryParameters.Add("@client_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
             string sql = $@"Client_Package.GetClientByLogin";
-            return provider.Connection.QueryFirst<Client>(sql, queryParameters, commandType: CommandType.StoredProcedure);
+            return provider.Connection.QueryFirstOrDefault<Client>(sql, queryParameters, commandType: CommandType.StoredProcedure);
         }
 
         public int Insert(Client item)

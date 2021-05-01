@@ -100,8 +100,26 @@
     <Compile Include="Pages\ContractsPage.xaml.cs">
       <DependentUpon>ContractsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\ExecuteServicePage.xaml.cs">
+      <DependentUpon>ExecuteServicePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ExecuteСontractPage.xaml.cs">
+      <DependentUpon>ExecuteСontractPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PaymentForContractPage.xaml.cs">
+      <DependentUpon>PaymentForContractPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PhoneNumbersPage.xaml.cs">
+      <DependentUpon>PhoneNumbersPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\RecommendationsPage.xaml.cs">
+      <DependentUpon>RecommendationsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ServicesPage.xaml.cs">
+      <DependentUpon>ServicesPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Repository\ServiceRepository.cs" />
     <Compile Include="Repository\PaymentRepository.cs" />
@@ -135,7 +153,31 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\ExecuteServicePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ExecuteСontractPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\LoginPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\PaymentForContractPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\PhoneNumbersPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\RecommendationsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ServicesPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

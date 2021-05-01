@@ -1,5 +1,6 @@
 ﻿using MobileOperatorApplication.Model;
 using MobileOperatorApplication.Oracle;
+using MobileOperatorApplication.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,22 +23,30 @@ namespace MobileOperatorApplication.Pages
     /// </summary>
     public partial class LoginPage : Page
     {
-        OracleProvider provider;
+        OracleProvider Provider;
 
         public LoginPage(OracleProvider oracleProvider)
         {
             InitializeComponent();
-            provider = oracleProvider;
+            Provider = oracleProvider;
         }
 
         void EnterApplication(object sender, EventArgs e)
         {
-            AccountInfo account = provider.GetAccount(Login.Text, Password.Password);
+            if (sender != EnterButton && (e as KeyEventArgs).Key != Key.Enter)
+                return;
 
-            if (account != null)
-                (Window.GetWindow(this) as MainWindow).CloseLoginPage(account);
-            else
-                Message.Text = "Неверный логин или пароль";
+            try
+            {
+                AccountInfo account = Provider.GetAccount(Login.Text, Password.Password);
+                ClientRepository clientRepository = new ClientRepository(Provider);
+                Client client = clientRepository.Get(account.LOGIN);
+                if (account != null)
+                    (Window.GetWindow(this) as MainWindow).CloseLoginPage(account, client);
+            }
+            catch { }
+
+            Message.Text = "Неверный логин или пароль";
         }
     }
 }

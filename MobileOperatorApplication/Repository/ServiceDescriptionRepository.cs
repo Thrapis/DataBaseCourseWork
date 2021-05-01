@@ -42,7 +42,7 @@ namespace MobileOperatorApplication.Repository
             queryParameters.Add("@service_desc_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
             string sql = $@"ServiceDescription_Package.GetServiceDescriptionById";
-            return provider.Connection.QueryFirst<ServiceDescription>(sql, queryParameters, commandType: CommandType.StoredProcedure);
+            return provider.Connection.QueryFirstOrDefault<ServiceDescription>(sql, queryParameters, commandType: CommandType.StoredProcedure);
         }
 
         public int Insert(ServiceDescription item)

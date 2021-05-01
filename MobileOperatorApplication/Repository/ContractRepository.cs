@@ -111,6 +111,16 @@ namespace MobileOperatorApplication.Repository
 			return provider.Connection.Query<Service>(sql, queryParameters, commandType: CommandType.StoredProcedure);
 		}
 
+		public IEnumerable<PhoneNumber> GetAllPhoneNumbers(int id)
+		{
+			OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+			queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
+			queryParameters.Add("@phone_number_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
+
+			string sql = $"Contract_Package.GetAllPhoneNumbersByContractId";
+			return provider.Connection.Query<PhoneNumber>(sql, queryParameters, commandType: CommandType.StoredProcedure);
+		}
+
 		public IEnumerable<ServiceDescription> GetServiceRecommendations(int id, int recommendations_count)
 		{
 			OracleDynamicParameters queryParameters = new OracleDynamicParameters();

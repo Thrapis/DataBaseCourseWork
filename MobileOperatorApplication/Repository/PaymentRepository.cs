@@ -42,7 +42,7 @@ namespace MobileOperatorApplication.Repository
 			queryParameters.Add("@payment_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
 			string sql = $@"Payment_Package.GetPaymentById";
-			return provider.Connection.QueryFirst<Payment>(sql, queryParameters, commandType: CommandType.StoredProcedure);
+			return provider.Connection.QueryFirstOrDefault<Payment>(sql, queryParameters, commandType: CommandType.StoredProcedure);
 		}
 
 		public int Insert(Payment item)

@@ -15,7 +15,77 @@
         </Grid.ColumnDefinitions>
 
         <Border BorderBrush="DarkRed" Background="MintCream" BorderThickness="0 0 1 0" Grid.Column="1">
-            
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <Grid  Grid.Row="0">
+                    <TextBlock Text="Account" FontFamily="Unispace" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+                </Grid>
+                <Grid  Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+
+
+                    <Grid Grid.Row="0" Background="LightGray">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="Login" FontFamily="Unispace" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="10"/>
+                        <TextBlock Grid.Column="1" x:Name="Login" Text="Login" FontFamily="Unispace" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="10"/>
+                    </Grid>
+
+                    <Grid Grid.Row="1" Background="WhiteSmoke">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Row="1" Text="Full Name" FontFamily="Unispace" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="10"/>
+                        <TextBlock Grid.Row="1" Grid.Column="1" x:Name="FullName" Text="FullName" FontFamily="Unispace" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="10"/>
+                    </Grid>
+
+                    <Grid Grid.Row="2" Background="LightGray">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Row="2" Text="Passport Number" TextWrapping="Wrap" FontFamily="Unispace" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="10"/>
+                        <TextBlock Grid.Row="2" Grid.Column="1" x:Name="PassNum" Text="PassNum" FontFamily="Unispace" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="10"/>
+                    </Grid>
+
+                    <Grid Grid.Row="3" Background="WhiteSmoke">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Row="3" Text="Contracts Count" TextWrapping="Wrap" FontFamily="Unispace" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="10"/>
+                        <TextBlock Grid.Row="3" Grid.Column="1" x:Name="ContractsCount" Text="ContractsCount" FontFamily="Unispace" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="10"/>
+                    </Grid>
+
+                    <Grid Grid.Row="4" Background="LightGray">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Row="4" Text="Services Count" TextWrapping="Wrap" FontFamily="Unispace" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="10"/>
+                        <TextBlock Grid.Row="4" Grid.Column="1" x:Name="ServicesCount" Text="ServicesCount" FontFamily="Unispace" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="10"/>
+                    </Grid>
+
+                </Grid>
+            </Grid>
         </Border>
     </Grid>
 </Page>

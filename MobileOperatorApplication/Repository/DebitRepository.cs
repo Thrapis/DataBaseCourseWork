@@ -42,7 +42,7 @@ namespace MobileOperatorApplication.Repository
 			queryParameters.Add("@debit_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
 			string sql = $@"Debit_Package.GetDebitById";
-			return provider.Connection.QueryFirst<Debit>(sql, queryParameters, commandType: CommandType.StoredProcedure);
+			return provider.Connection.QueryFirstOrDefault<Debit>(sql, queryParameters, commandType: CommandType.StoredProcedure);
 		}
 
 		public int Insert(Debit item)

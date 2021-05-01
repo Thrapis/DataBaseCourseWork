@@ -1,4 +1,7 @@
-﻿using System;
+﻿using MobileOperatorApplication.Model;
+using MobileOperatorApplication.Oracle;
+using MobileOperatorApplication.Repository;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +23,25 @@ namespace MobileOperatorApplication.Pages
     /// </summary>
     public partial class AccountPage : Page
     {
-        public AccountPage()
+        OracleProvider Provider;
+        Client Client;
+        public AccountPage(OracleProvider oracleProvider, Client client)
         {
             InitializeComponent();
+            Provider = oracleProvider;
+            Client = client;
+            FillWithInfo();
+        }
+
+        void FillWithInfo()
+        {
+            ClientRepository clientRepository = new ClientRepository(Provider);
+            
+            FullName.Text = Client.FULL_NAME;
+            Login.Text = Client.ACCOUNT_LOGIN;
+            PassNum.Text = Client.PASSPORT_NUMBER.Substring(0, 3) + "******";
+            ContractsCount.Text = clientRepository.GetAllContracts(Client.ID).Count().ToString();
+            ServicesCount.Text = clientRepository.GetAllServices(Client.ID).Count().ToString();
         }
     }
 }

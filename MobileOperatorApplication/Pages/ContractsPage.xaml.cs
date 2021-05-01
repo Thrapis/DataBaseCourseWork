@@ -25,30 +25,77 @@ namespace MobileOperatorApplication.Pages
     {
         OracleProvider Provider;
         Client Client;
+        IEnumerable<Contract> Contracts;
 
         public ContractsPage(OracleProvider oracleProvider, Client client)
         {
             InitializeComponent();
             Provider = oracleProvider;
             Client = client;
-            GetContractBalances(null, null);
+            FillWithInfo(null, null);
         }
 
-        void GetContractBalances(object sender, EventArgs e)
+        void FillWithInfo(object sender, EventArgs e)
         {
             ClientRepository clientRepository = new ClientRepository(Provider);
 
-            IEnumerable<Contract> contracts = clientRepository.GetAllContracts(Client.ID);
+            Contracts = clientRepository.GetAllContracts(Client.ID);
 
             ContractsStack.Children.Clear();
 
-            foreach (Contract contract in contracts)
+            for (int i = 0; i < Contracts.Count(); i++)
             {
-                ContractsStack.Children.Add(GetContractRow(contract));
+                ContractsStack.Children.Add(GetContractRow(Contracts.ElementAt(i), i));
             }
         }
 
-        Grid GetContractRow(Contract contract)
+        void PayForContract(object sender, RoutedEventArgs e)
+        {
+            string myValue = ((MenuItem)sender).Tag.ToString();
+            int index = Convert.ToInt32(myValue);
+
+            Contract contract = Contracts.ElementAt(index);
+
+            (Window.GetWindow(this) as MainWindow).OpenPaymentForContractPage(contract);
+        }
+
+        void DeleteContract(object sender, RoutedEventArgs e)
+        {
+            string myValue = ((MenuItem)sender).Tag.ToString();
+            int index = Convert.ToInt32(myValue);
+
+            Contract contract = Contracts.ElementAt(index);
+            ContractRepository contractRepository = new ContractRepository(Provider);
+            float balance = contractRepository.GetContractBalance(contract.ID);
+
+            if (balance < 0)
+            {
+                MessageBox.Show($"Balance of your {contract.ID} contract is under 0 BYN. Please pay for you debt", "Attention");
+                return;
+            }
+            else
+            {
+                MessageBoxResult result = MessageBox.Show($"Are you sure you want to terminate {contract.ID} contract?", "Attention", MessageBoxButton.YesNo);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    int deleted = contractRepository.Delete(contract.ID);
+                    Console.WriteLine(deleted);
+                    FillWithInfo(null, null);
+                    if (deleted == -1)
+                        MessageBox.Show("Database internal error", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    else 
+                        MessageBox.Show($"Contract {contract.ID} was terminated");
+                }
+            }
+        }
+
+        private void CreateContract(object sender, RoutedEventArgs e)
+        {
+            (Window.GetWindow(this) as MainWindow).OpenExecuteContractPage();
+        }
+
+        Grid GetContractRow(Contract contract, int index)
         {
             ContractRepository contractRepository = new ContractRepository(Provider);
             EmployeeRepository employeeRepository = new EmployeeRepository(Provider);
@@ -61,10 +108,23 @@ namespace MobileOperatorApplication.Pages
             Grid gridRow = new Grid();
             gridRow.Background = new SolidColorBrush(Colors.LightGray);
 
+            ContextMenu context = new ContextMenu();
+            MenuItem pay = new MenuItem();
+            pay.Header = "Payment";
+            pay.Tag = index;
+            pay.Click += PayForContract;
+            MenuItem delete = new MenuItem();
+            delete.Header = "Terminate";
+            delete.Tag = index;
+            delete.Click += DeleteContract;
+            context.Items.Add(pay);
+            context.Items.Add(delete);
+            gridRow.ContextMenu = context;
+
             ColumnDefinition cd1 = new ColumnDefinition();
             cd1.Width = new GridLength(0.5, GridUnitType.Star);
             gridRow.ColumnDefinitions.Add(cd1);
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 6; i++)
             {
                 ColumnDefinition cd2 = new ColumnDefinition();
                 cd2.Width = new GridLength(1, GridUnitType.Star);
@@ -73,7 +133,7 @@ namespace MobileOperatorApplication.Pages
 
             List<TextBlock> textBlocks = new List<TextBlock>();
 
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < 7; i++)
             {
                 TextBlock tb = new TextBlock();
                 tb.TextWrapping = TextWrapping.Wrap;
@@ -90,7 +150,8 @@ namespace MobileOperatorApplication.Pages
             textBlocks.ElementAt(2).Text = Client.FULL_NAME;
             textBlocks.ElementAt(3).Text = employee.FULL_NAME;
             textBlocks.ElementAt(4).Text = contract.SIGNING_DATETIME.ToString();
-            textBlocks.ElementAt(5).Text = balance.ToString();
+            textBlocks.ElementAt(5).Text = tariff.TARIFF_AMOUNT.ToString();
+            textBlocks.ElementAt(6).Text = balance.ToString();
 
             for (int i = 0; i < textBlocks.Count; i++)
             {
