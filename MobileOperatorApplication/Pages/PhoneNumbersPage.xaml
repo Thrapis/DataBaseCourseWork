@@ -34,17 +34,18 @@
 
                 </Grid>
 
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1">
+                    <StackPanel x:Name="PhoneNumbersStack">
+                        <Grid Background="LightGray">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="0.5*"></ColumnDefinition>
+                                <ColumnDefinition Width="0.5*"></ColumnDefinition>
+                                <ColumnDefinition Width="1*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                        </Grid>
 
-                <StackPanel x:Name="PhoneNumbersStack" Grid.Row="1">
-                    <Grid Background="LightGray">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="0.5*"></ColumnDefinition>
-                            <ColumnDefinition Width="0.5*"></ColumnDefinition>
-                            <ColumnDefinition Width="1*"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                    </Grid>
-                    
-                </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
 
             </Grid>
         </Border>

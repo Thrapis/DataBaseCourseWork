@@ -36,17 +36,25 @@ namespace MobileOperatorApplication.Pages
             if (sender != EnterButton && (e as KeyEventArgs).Key != Key.Enter)
                 return;
 
-            try
-            {
-                AccountInfo account = Provider.GetAccount(Login.Text, Password.Password);
-                ClientRepository clientRepository = new ClientRepository(Provider);
-                Client client = clientRepository.Get(account.LOGIN);
-                if (account != null)
-                    (Window.GetWindow(this) as MainWindow).CloseLoginPage(account, client);
-            }
-            catch { }
+            AccountInfo account = Provider.GetAccount(Login.Text, Password.Password);
 
-            Message.Text = "Неверный логин или пароль";
+            if (account == null)
+            {
+                Message.Text = "Неверный логин или пароль";
+                return;
+            }
+
+            ClientRepository clientRepository = new ClientRepository(Provider);
+            EmployeeRepository employeeRepository = new EmployeeRepository(Provider);
+            Client client = clientRepository.Get(account.LOGIN);
+            Employee employee = employeeRepository.Get(account.LOGIN);
+
+            if (client != null)
+                (Window.GetWindow(this) as MainWindow).CloseLoginPage(account, client);
+            else if (employee != null)
+                (Window.GetWindow(this) as MainWindow).CloseLoginPage(account, employee);
+            else
+                Message.Text = "Неверный логин или пароль";
         }
     }
 }

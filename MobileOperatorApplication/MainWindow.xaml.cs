@@ -29,6 +29,7 @@ namespace MobileOperatorApplication
         OracleProvider Provider;
         AccountInfo Account;
         Client Client;
+        Employee Employee;
 
         public MainWindow()
         {
@@ -59,9 +60,24 @@ namespace MobileOperatorApplication
         {
             Account = account;
             Client = client;
-            Overlay.Content = null;
+            SignedContractsB.Visibility = Visibility.Collapsed;
             OpenAccountPage(null, null);
+            Overlay.Content = null;
         }
+        public void CloseLoginPage(AccountInfo account, Employee employee)
+        {
+            Account = account;
+            Employee = employee;
+            RecommendationsB.Visibility = Visibility.Collapsed;
+            AccountB.Visibility = Visibility.Collapsed;
+            ContractsB.Visibility = Visibility.Collapsed;
+            ServicesB.Visibility = Visibility.Collapsed;
+            PhoneNumbersB.Visibility = Visibility.Collapsed;
+            OpenSignedContractsPage(null, null);
+            Overlay.Content = null;
+        }
+
+
         public void OpenPaymentForContractPage(Contract contract)
         {
             Overlay.Content = new PaymentForContractPage(Provider, contract);
@@ -116,6 +132,10 @@ namespace MobileOperatorApplication
         public void OpenPhoneNumbersPage(object sender, EventArgs e)
         {
             Main.Content = new PhoneNumbersPage(Provider, Client);
+        }
+        public void OpenSignedContractsPage(object sender, EventArgs e)
+        {
+            Main.Content = new SignedContractsPage(Provider, Employee);
         }
     }
 }

@@ -15,7 +15,7 @@
         </Grid.ColumnDefinitions>
 
         <Border BorderBrush="DarkRed" Background="MintCream" BorderThickness="0 0 1 0" Grid.Column="1">
-            <ScrollViewer>
+            <ScrollViewer  VerticalScrollBarVisibility="Auto">
                 <StackPanel x:Name="AllContainer">
 
                     <StackPanel x:Name="RecommendationsStack" Grid.Row="1">

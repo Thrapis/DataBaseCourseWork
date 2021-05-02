@@ -44,20 +44,21 @@
                     
                 </Grid>
 
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1">
+                    <StackPanel x:Name="ServicesStack">
+                        <Grid Background="LightGray">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="0.5*"></ColumnDefinition>
+                                <ColumnDefinition Width="1*"></ColumnDefinition>
+                                <ColumnDefinition Width="1*"></ColumnDefinition>
+                                <ColumnDefinition Width="1*"></ColumnDefinition>
+                                <ColumnDefinition Width="1*"></ColumnDefinition>
+                                <ColumnDefinition Width="1*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
 
-                <StackPanel x:Name="ServicesStack" Grid.Row="1">
-                    <Grid Background="LightGray">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="0.5*"></ColumnDefinition>
-                            <ColumnDefinition Width="1*"></ColumnDefinition>
-                            <ColumnDefinition Width="1*"></ColumnDefinition>
-                            <ColumnDefinition Width="1*"></ColumnDefinition>
-                            <ColumnDefinition Width="1*"></ColumnDefinition>
-                            <ColumnDefinition Width="1*"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        
-                    </Grid>
-                </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </ScrollViewer>
 
                 <Button FontFamily="Unispace" Click="FillWithInfo" Margin="603,339.2,9.8,9.6" Grid.Row="1">
                     <TextBlock FontSize="12" Text="Update"/>

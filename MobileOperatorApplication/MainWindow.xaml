@@ -15,24 +15,28 @@
 
             <Border Background="Crimson" Grid.Column="0">
                 <StackPanel>
-                    <Button Height="50" Foreground="White" Background="Crimson" BorderBrush="DarkRed" BorderThickness="3 1.5 3 1.5" Click="OpenRecommendationsPage">
-                        <TextBlock Text="Recomendations" TextAlignment="Center"
-                                   TextWrapping="Wrap" FontFamily="Unispace" FontSize="13" FontWeight="Bold" TextDecorations="{x:Null}"/>
+                    <Button x:Name="RecommendationsB" Height="50" Foreground="White" Background="Crimson" BorderBrush="DarkRed" BorderThickness="3 1.5 3 1.5" Click="OpenRecommendationsPage">
+                        <TextBlock Text="Recommendations" TextAlignment="Center"
+                                   TextWrapping="Wrap" FontFamily="Unispace" FontSize="12" FontWeight="Bold" TextDecorations="{x:Null}"/>
                     </Button>
-                    <Button Height="50" Foreground="White" Background="Crimson" BorderBrush="DarkRed" BorderThickness="3 1.5 3 1.5" Click="OpenAccountPage">
+                    <Button x:Name="AccountB" Height="50" Foreground="White" Background="Crimson" BorderBrush="DarkRed" BorderThickness="3 1.5 3 1.5" Click="OpenAccountPage">
                         <TextBlock Text="Account" TextAlignment="Center"
                                    TextWrapping="Wrap" FontFamily="Unispace" FontSize="18" FontWeight="Bold" TextDecorations="{x:Null}"/>
                     </Button>
-                    <Button Height="50" Foreground="White" Background="Crimson" BorderBrush="DarkRed" BorderThickness="3 1.5 3 1.5" Click="OpenContractsPage">
+                    <Button x:Name="ContractsB" Height="50" Foreground="White" Background="Crimson" BorderBrush="DarkRed" BorderThickness="3 1.5 3 1.5" Click="OpenContractsPage">
                         <TextBlock Text="Contracts" TextAlignment="Center"
                                    TextWrapping="Wrap" FontFamily="Unispace" FontSize="18" FontWeight="Bold" TextDecorations="{x:Null}"/>
                     </Button>
-                    <Button Height="50" Foreground="White" Background="Crimson" BorderBrush="DarkRed" BorderThickness="3 1.5 3 1.5" Click="OpenServicesPage">
+                    <Button x:Name="ServicesB" Height="50" Foreground="White" Background="Crimson" BorderBrush="DarkRed" BorderThickness="3 1.5 3 1.5" Click="OpenServicesPage">
                         <TextBlock Text="Services" TextAlignment="Center"
                                    TextWrapping="Wrap" FontFamily="Unispace" FontSize="18" FontWeight="Bold" TextDecorations="{x:Null}"/>
                     </Button>
-                    <Button Height="50" Foreground="White" Background="Crimson" BorderBrush="DarkRed" BorderThickness="3 1.5 3 1.5" Click="OpenPhoneNumbersPage">
+                    <Button x:Name="PhoneNumbersB" Height="50" Foreground="White" Background="Crimson" BorderBrush="DarkRed" BorderThickness="3 1.5 3 1.5" Click="OpenPhoneNumbersPage">
                         <TextBlock Text="Phone Numbers" TextAlignment="Center"
+                                   TextWrapping="Wrap" FontFamily="Unispace" FontSize="16" FontWeight="Bold" TextDecorations="{x:Null}"/>
+                    </Button>
+                    <Button x:Name="SignedContractsB" Height="50" Foreground="White" Background="Crimson" BorderBrush="DarkRed" BorderThickness="3 1.5 3 1.5" Click="OpenSignedContractsPage">
+                        <TextBlock Text="Signed Contracts" TextAlignment="Center"
                                    TextWrapping="Wrap" FontFamily="Unispace" FontSize="16" FontWeight="Bold" TextDecorations="{x:Null}"/>
                     </Button>
                 </StackPanel>

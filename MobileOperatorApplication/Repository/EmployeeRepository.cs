@@ -45,6 +45,16 @@ namespace MobileOperatorApplication.Repository
             return provider.Connection.QueryFirstOrDefault<Employee>(sql, queryParameters, commandType: CommandType.StoredProcedure);
         }
 
+        public Employee Get(string login)
+        {
+            OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+            queryParameters.Add("@par_login", login, OracleMappingType.NVarchar2, ParameterDirection.Input);
+            queryParameters.Add("@employee_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
+
+            string sql = $@"Employee_Package.GetEmployeeByLogin";
+            return provider.Connection.QueryFirstOrDefault<Employee>(sql, queryParameters, commandType: CommandType.StoredProcedure);
+        }
+
         public int Insert(Employee item)
         {
             OracleDynamicParameters queryParameters = new OracleDynamicParameters();
@@ -84,6 +94,16 @@ namespace MobileOperatorApplication.Repository
             provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
             int deleted = queryParameters.Get<int>("@deleted");
             return deleted;
+        }
+
+        public IEnumerable<Contract> GetAllSignedContracts(int id)
+        {
+            OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+            queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
+            queryParameters.Add("@contract_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
+
+            string sql = $"Employee_Package.GetAllContractsByEmployeeId";
+            return provider.Connection.Query<Contract>(sql, queryParameters, commandType: CommandType.StoredProcedure);
         }
 
         public void Dispose()
