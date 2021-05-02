@@ -42,18 +42,19 @@ namespace MobileOperatorApplication.Data
 
 		public static int GetAllDataCount()
         {
+			OracleProvider oracleProvider = new OracleProvider();
 			int count = 0;
-			count += new CallRepository().GetAll().Count();
-			count += new ClientRepository().GetAll().Count();
-			count += new ContractRepository().GetAll().Count();
-			count += new DebitRepository().GetAll().Count();
-			count += new EmployeeRepository().GetAll().Count();
-			count += new PaymentRepository().GetAll().Count();
-			count += new PhoneNumberRepository().GetAll().Count();
-			count += new PostRepository().GetAll().Count();
-			count += new ServiceDescriptionRepository().GetAll().Count();
-			count += new ServiceRepository().GetAll().Count();
-			count += new TariffPlanRepository().GetAll().Count();
+			count += new CallRepository(oracleProvider).GetAll().Count();
+			count += new ClientRepository(oracleProvider).GetAll().Count();
+			count += new ContractRepository(oracleProvider).GetAll().Count();
+			count += new DebitRepository(oracleProvider).GetAll().Count();
+			count += new EmployeeRepository(oracleProvider).GetAll().Count();
+			count += new PaymentRepository(oracleProvider).GetAll().Count();
+			count += new PhoneNumberRepository(oracleProvider).GetAll().Count();
+			count += new PostRepository(oracleProvider).GetAll().Count();
+			count += new ServiceDescriptionRepository(oracleProvider).GetAll().Count();
+			count += new ServiceRepository(oracleProvider).GetAll().Count();
+			count += new TariffPlanRepository(oracleProvider).GetAll().Count();
 			return count;
         }
 

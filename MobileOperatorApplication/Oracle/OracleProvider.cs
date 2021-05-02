@@ -78,12 +78,5 @@ namespace MobileOperatorApplication.Oracle
             int changed = queryParameters.Get<int>("@changed");
             return changed;
         }
-
-        
-
-        public IEnumerable<Post> GetPosts()
-        {
-            return Connection.Query<Post>("select * from POST");
-        }
     }
 }

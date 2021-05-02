@@ -37,6 +37,8 @@ namespace MobileOperatorApplication
 
             Provider = new OracleProvider();
 
+            //Console.WriteLine(DataGeneration.GetAllDataCount());
+
             //ContractRepository contractRepository = new ContractRepository(Provider);
 
             //Console.WriteLine(contractRepository.Get(95));

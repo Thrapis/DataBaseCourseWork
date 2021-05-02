@@ -17,9 +17,9 @@
                 <TextBlock x:Name="Message" Text="" Foreground="Red" TextWrapping="Wrap" Width="160"
                        HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-140,0,0" FontSize="12"/>
                 <TextBlock Text="Login" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-230,-60,0,0" FontSize="20"/>
-                <TextBox x:Name="Login" MaxLength="26" Text="marlin_abanin" Width="200" Height="30" FontSize="18" Margin="100,-60,0,0" KeyDown="EnterApplication"/>
+                <TextBox x:Name="Login" MaxLength="26" Text="" Width="200" Height="30" FontSize="18" Margin="100,-60,0,0" KeyDown="EnterApplication"/>
                 <TextBlock Text="Password" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-220,40,0,0" FontSize="20"/>
-                <PasswordBox x:Name="Password" Password="12345" PasswordChar="*" MaxLength="26" Width="200" Height="30" FontSize="18" Margin="100,40,0,0" KeyDown="EnterApplication"/>
+                <PasswordBox x:Name="Password" Password="" PasswordChar="*" MaxLength="26" Width="200" Height="30" FontSize="18" Margin="100,40,0,0" KeyDown="EnterApplication"/>
                 <Button x:Name="EnterButton" Content="Enter" Width="120" Height="40" Margin="0,200,0,0" Click="EnterApplication"/>
             </Grid>
         </Border>
