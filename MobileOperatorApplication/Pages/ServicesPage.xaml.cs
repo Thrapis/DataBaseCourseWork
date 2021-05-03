@@ -71,7 +71,7 @@ namespace MobileOperatorApplication.Pages
                         sortedPhoneNumbers.Add(phoneNumbers.ElementAt(i).ID, phoneNumbers.ElementAt(i));
                     }
                     PhoneNumberRepository phoneNumberRepository = new PhoneNumberRepository(Provider);
-                    for (int i = sortedPhoneNumbers.Count - 1; i >= sortedPhoneNumbers.Count - 3; i--)
+                    for (int i = sortedPhoneNumbers.Count - 1; i >= sortedPhoneNumbers.Count - 2 && i >= 0; i--)
                     {
                         phoneNumberRepository.Delete(sortedPhoneNumbers.ElementAt(i).Value.ID);
                     }

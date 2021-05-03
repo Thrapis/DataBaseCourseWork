@@ -31,7 +31,7 @@ namespace MobileOperatorApplication.Repository
             OracleDynamicParameters queryParameters = new OracleDynamicParameters();
             queryParameters.Add("@client_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
-            string sql = $"Client_Package.GetAllClients";
+            string sql = $"C##BAA.Client_Package.GetAllClients";
             return provider.Connection.Query<Client>(sql, queryParameters, commandType: CommandType.StoredProcedure);
         }
 
@@ -41,7 +41,7 @@ namespace MobileOperatorApplication.Repository
             queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
             queryParameters.Add("@client_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
-            string sql = $@"Client_Package.GetClientById";
+            string sql = $@"C##BAA.Client_Package.GetClientById";
             return provider.Connection.QueryFirstOrDefault<Client>(sql, queryParameters, commandType: CommandType.StoredProcedure);
         }
 
@@ -51,7 +51,7 @@ namespace MobileOperatorApplication.Repository
             queryParameters.Add("@par_login", login, OracleMappingType.NVarchar2, ParameterDirection.Input);
             queryParameters.Add("@client_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
-            string sql = $@"Client_Package.GetClientByLogin";
+            string sql = $@"C##BAA.Client_Package.GetClientByLogin";
             return provider.Connection.QueryFirstOrDefault<Client>(sql, queryParameters, commandType: CommandType.StoredProcedure);
         }
 
@@ -63,7 +63,7 @@ namespace MobileOperatorApplication.Repository
             queryParameters.Add("@par_account_login", item.ACCOUNT_LOGIN, OracleMappingType.NVarchar2, ParameterDirection.Input);
             queryParameters.Add("@inserted", 0, OracleMappingType.Int64, ParameterDirection.Output);
 
-            string sql = $@"Client_Package.InsertClient";
+            string sql = $@"C##BAA.Client_Package.InsertClient";
             provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
             int inserted = queryParameters.Get<int>("@inserted");
             return inserted;
@@ -78,7 +78,7 @@ namespace MobileOperatorApplication.Repository
             queryParameters.Add("@par_account_login", item.ACCOUNT_LOGIN, OracleMappingType.NVarchar2, ParameterDirection.Input);
             queryParameters.Add("@updated", 0, OracleMappingType.Int64, ParameterDirection.Output);
 
-            string sql = $@"Client_Package.UpdateClient";
+            string sql = $@"C##BAA.Client_Package.UpdateClient";
             provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
             int updated = queryParameters.Get<int>("@updated");
             return updated;
@@ -90,7 +90,7 @@ namespace MobileOperatorApplication.Repository
             queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
             queryParameters.Add("@deleted", 0, OracleMappingType.Int64, ParameterDirection.Output);
 
-            string sql = $@"Client_Package.DeleteClient";
+            string sql = $@"C##BAA.Client_Package.DeleteClient";
             provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
             int deleted = queryParameters.Get<int>("@deleted");
             return deleted;
@@ -102,7 +102,7 @@ namespace MobileOperatorApplication.Repository
             queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
             queryParameters.Add("@service_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
-            string sql = $"Client_Package.GetAllServicesByClientId";
+            string sql = $"C##BAA.Client_Package.GetAllServicesByClientId";
             return provider.Connection.Query<Service>(sql, queryParameters, commandType: CommandType.StoredProcedure);
         }
 
@@ -112,7 +112,7 @@ namespace MobileOperatorApplication.Repository
             queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
             queryParameters.Add("@contract_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
-            string sql = $"Client_Package.GetAllContractsByClientId";
+            string sql = $"C##BAA.Client_Package.GetAllContractsByClientId";
             return provider.Connection.Query<Contract>(sql, queryParameters, commandType: CommandType.StoredProcedure);
         }
 
@@ -123,7 +123,7 @@ namespace MobileOperatorApplication.Repository
             queryParameters.Add("@par_recommendations_count", recommendations_count, OracleMappingType.Int64, ParameterDirection.Input);
             queryParameters.Add("@tariff_plan_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
-            string sql = $"Client_Package.GetTariffRecommendationsByClientId";
+            string sql = $"C##BAA.Client_Package.GetTariffRecommendationsByClientId";
             return provider.Connection.Query<TariffPlan>(sql, queryParameters, commandType: CommandType.StoredProcedure);
         }
 

@@ -31,7 +31,7 @@ namespace MobileOperatorApplication.Repository
 			OracleDynamicParameters queryParameters = new OracleDynamicParameters();
 			queryParameters.Add("@service_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
-			string sql = $"Service_Package.GetAllServices";
+			string sql = $"C##BAA.Service_Package.GetAllServices";
 			return provider.Connection.Query<Service>(sql, queryParameters, commandType: CommandType.StoredProcedure);
 		}
 
@@ -41,7 +41,7 @@ namespace MobileOperatorApplication.Repository
 			queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
 			queryParameters.Add("@service_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
-			string sql = $@"Service_Package.GetServiceById";
+			string sql = $@"C##BAA.Service_Package.GetServiceById";
 			return provider.Connection.QueryFirstOrDefault<Service>(sql, queryParameters, commandType: CommandType.StoredProcedure);
 		}
 
@@ -55,7 +55,7 @@ namespace MobileOperatorApplication.Repository
 			queryParameters.Add("@par_disconnection_date", item.DISCONNECTION_DATE.ToString("yyyy-MM-dd HH:mm:ss"), OracleMappingType.NVarchar2, ParameterDirection.Input);
 			queryParameters.Add("@inserted", 0, OracleMappingType.Int64, ParameterDirection.Output);
 
-			string sql = $@"Service_Package.InsertService";
+			string sql = $@"C##BAA.Service_Package.InsertService";
 			provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
 			int inserted = queryParameters.Get<int>("@inserted");
 			return inserted;
@@ -72,7 +72,7 @@ namespace MobileOperatorApplication.Repository
 			queryParameters.Add("@par_disconnection_date", item.DISCONNECTION_DATE.ToString("yyyy-MM-dd HH:mm:ss"), OracleMappingType.NVarchar2, ParameterDirection.Input);
 			queryParameters.Add("@updated", 0, OracleMappingType.Int64, ParameterDirection.Output);
 
-			string sql = $@"Service_Package.UpdateService";
+			string sql = $@"C##BAA.Service_Package.UpdateService";
 			provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
 			int updated = queryParameters.Get<int>("@updated");
 			return updated;
@@ -84,7 +84,7 @@ namespace MobileOperatorApplication.Repository
 			queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
 			queryParameters.Add("@deleted", 0, OracleMappingType.Int64, ParameterDirection.Output);
 
-			string sql = $@"Service_Package.DeleteService";
+			string sql = $@"C##BAA.Service_Package.DeleteService";
 			provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
 			int deleted = queryParameters.Get<int>("@deleted");
 			return deleted;

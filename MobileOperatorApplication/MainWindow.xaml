@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MobileOperatorApplication"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" ResizeMode="NoResize">
+        Title="Cellular Service Manager" Height="450" Width="800" ResizeMode="NoResize" Icon="phone-call-icon.png">
     <Grid>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -33,6 +33,10 @@
                     </Button>
                     <Button x:Name="PhoneNumbersB" Height="50" Foreground="White" Background="Crimson" BorderBrush="DarkRed" BorderThickness="3 1.5 3 1.5" Click="OpenPhoneNumbersPage">
                         <TextBlock Text="Phone Numbers" TextAlignment="Center"
+                                   TextWrapping="Wrap" FontFamily="Unispace" FontSize="16" FontWeight="Bold" TextDecorations="{x:Null}"/>
+                    </Button>
+                    <Button x:Name="DebitsAndPaymentsB" Height="50" Foreground="White" Background="Crimson" BorderBrush="DarkRed" BorderThickness="3 1.5 3 1.5" Click="OpenDebitsAndPaymentsPage">
+                        <TextBlock Text="Debits And Payments" TextAlignment="Center"
                                    TextWrapping="Wrap" FontFamily="Unispace" FontSize="16" FontWeight="Bold" TextDecorations="{x:Null}"/>
                     </Button>
                     <Button x:Name="SignedContractsB" Height="50" Foreground="White" Background="Crimson" BorderBrush="DarkRed" BorderThickness="3 1.5 3 1.5" Click="OpenSignedContractsPage">

@@ -32,7 +32,7 @@ namespace MobileOperatorApplication.Repository
 			OracleDynamicParameters queryParameters = new OracleDynamicParameters();
 			queryParameters.Add("@contract_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
-			string sql = $"Contract_Package.GetAllContracts";
+			string sql = $"C##BAA.Contract_Package.GetAllContracts";
 			return provider.Connection.Query<Contract>(sql, queryParameters, commandType: CommandType.StoredProcedure);
 		}
 
@@ -42,7 +42,7 @@ namespace MobileOperatorApplication.Repository
 			queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
 			queryParameters.Add("@contract_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
-			string sql = $@"Contract_Package.GetContractById";
+			string sql = $@"C##BAA.Contract_Package.GetContractById";
 			return provider.Connection.QueryFirst<Contract>(sql, queryParameters, commandType: CommandType.StoredProcedure);
 		}
 
@@ -55,7 +55,7 @@ namespace MobileOperatorApplication.Repository
 			queryParameters.Add("@par_signing_datetime", item.SIGNING_DATETIME.ToString("yyyy-MM-dd HH:mm:ss"), OracleMappingType.NVarchar2, ParameterDirection.Input);
 			queryParameters.Add("@inserted", 0, OracleMappingType.Int64, ParameterDirection.Output);
 
-			string sql = $@"Contract_Package.InsertContract";
+			string sql = $@"C##BAA.Contract_Package.InsertContract";
 			provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
 			int inserted = queryParameters.Get<int>("@inserted");
 			return inserted;
@@ -71,7 +71,7 @@ namespace MobileOperatorApplication.Repository
 			queryParameters.Add("@par_signing_datetime", item.SIGNING_DATETIME.ToString("yyyy-MM-dd HH:mm:ss"), OracleMappingType.NVarchar2, ParameterDirection.Input);
 			queryParameters.Add("@updated", 0, OracleMappingType.Int64, ParameterDirection.Output);
 
-			string sql = $@"Contract_Package.UpdateContract";
+			string sql = $@"C##BAA.Contract_Package.UpdateContract";
 			provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
 			int updated = queryParameters.Get<int>("@updated");
 			return updated;
@@ -83,7 +83,7 @@ namespace MobileOperatorApplication.Repository
 			queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
 			queryParameters.Add("@deleted", 0, OracleMappingType.Int64, ParameterDirection.Output);
 
-			string sql = $@"Contract_Package.DeleteContract";
+			string sql = $@"C##BAA.Contract_Package.DeleteContract";
 			provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
 			int deleted = queryParameters.Get<int>("@deleted");
 			return deleted;
@@ -95,7 +95,7 @@ namespace MobileOperatorApplication.Repository
 			queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
 			queryParameters.Add("@balance", 0, OracleMappingType.BinaryFloat, ParameterDirection.Output);
 
-			string sql = $@"Contract_Package.GetContractBalance";
+			string sql = $@"C##BAA.Contract_Package.GetContractBalance";
 			provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
 			float balance = queryParameters.Get<float>("@balance");
 			return balance;
@@ -107,7 +107,7 @@ namespace MobileOperatorApplication.Repository
 			queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
 			queryParameters.Add("@service_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
-			string sql = $"Contract_Package.GetAllServicesByContractId";
+			string sql = $"C##BAA.Contract_Package.GetAllServicesByContractId";
 			return provider.Connection.Query<Service>(sql, queryParameters, commandType: CommandType.StoredProcedure);
 		}
 
@@ -117,8 +117,28 @@ namespace MobileOperatorApplication.Repository
 			queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
 			queryParameters.Add("@phone_number_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
-			string sql = $"Contract_Package.GetAllPhoneNumbersByContractId";
+			string sql = $"C##BAA.Contract_Package.GetAllPhoneNumbersByContractId";
 			return provider.Connection.Query<PhoneNumber>(sql, queryParameters, commandType: CommandType.StoredProcedure);
+		}
+
+		public IEnumerable<Payment> GetAllPayments(int id)
+		{
+			OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+			queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
+			queryParameters.Add("@payment_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
+
+			string sql = $"C##BAA.Contract_Package.GetAllPaymentsByContractId";
+			return provider.Connection.Query<Payment>(sql, queryParameters, commandType: CommandType.StoredProcedure);
+		}
+
+		public IEnumerable<Debit> GetAllDebits(int id)
+		{
+			OracleDynamicParameters queryParameters = new OracleDynamicParameters();
+			queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
+			queryParameters.Add("@debit_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
+
+			string sql = $"C##BAA.Contract_Package.GetAllDebitsByContractId";
+			return provider.Connection.Query<Debit>(sql, queryParameters, commandType: CommandType.StoredProcedure);
 		}
 
 		public IEnumerable<ServiceDescription> GetServiceRecommendations(int id, int recommendations_count)
@@ -128,7 +148,7 @@ namespace MobileOperatorApplication.Repository
 			queryParameters.Add("@par_recommendations_count", recommendations_count, OracleMappingType.Int64, ParameterDirection.Input);
 			queryParameters.Add("@service_descriptions_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
-			string sql = $"Contract_Package.GetServiceRecommendationsByContract";
+			string sql = $"C##BAA.Contract_Package.GetServiceRecommendationsByContract";
 			return provider.Connection.Query<ServiceDescription>(sql, queryParameters, commandType: CommandType.StoredProcedure);
 		}
 

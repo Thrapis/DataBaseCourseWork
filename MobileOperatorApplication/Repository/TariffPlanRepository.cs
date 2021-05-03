@@ -31,7 +31,7 @@ namespace MobileOperatorApplication.Repository
             OracleDynamicParameters queryParameters = new OracleDynamicParameters();
             queryParameters.Add("@tariff_plan_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
-            string sql = $"TariffPlan_Package.GetAllTariffPlans";
+            string sql = $"C##BAA.TariffPlan_Package.GetAllTariffPlans";
             return provider.Connection.Query<TariffPlan>(sql, queryParameters, commandType: CommandType.StoredProcedure);
         }
 
@@ -41,7 +41,7 @@ namespace MobileOperatorApplication.Repository
             queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
             queryParameters.Add("@tariff_plan_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
-            string sql = $@"TariffPlan_Package.GetTariffPlanById";
+            string sql = $@"C##BAA.TariffPlan_Package.GetTariffPlanById";
             return provider.Connection.QueryFirstOrDefault<TariffPlan>(sql, queryParameters, commandType: CommandType.StoredProcedure);
         }
 
@@ -52,7 +52,7 @@ namespace MobileOperatorApplication.Repository
             queryParameters.Add("@par_tariff_amount", item.TARIFF_AMOUNT, OracleMappingType.BinaryFloat, ParameterDirection.Input);
             queryParameters.Add("@inserted", 0, OracleMappingType.Int64, ParameterDirection.Output);
 
-            string sql = $@"TariffPlan_Package.InsertTariffPlan";
+            string sql = $@"C##BAA.TariffPlan_Package.InsertTariffPlan";
             provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
             int inserted = queryParameters.Get<int>("@inserted");
             return inserted;
@@ -66,7 +66,7 @@ namespace MobileOperatorApplication.Repository
             queryParameters.Add("@par_tariff_amount", item.TARIFF_AMOUNT, OracleMappingType.BinaryFloat, ParameterDirection.Input);
             queryParameters.Add("@updated", 0, OracleMappingType.Int64, ParameterDirection.Output);
 
-            string sql = $@"TariffPlan_Package.UpdateTariffPlan";
+            string sql = $@"C##BAA.TariffPlan_Package.UpdateTariffPlan";
             provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
             int updated = queryParameters.Get<int>("@updated");
             return updated;
@@ -78,7 +78,7 @@ namespace MobileOperatorApplication.Repository
             queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
             queryParameters.Add("@deleted", 0, OracleMappingType.Int64, ParameterDirection.Output);
 
-            string sql = $@"TariffPlan_Package.DeleteTariffPlan";
+            string sql = $@"C##BAA.TariffPlan_Package.DeleteTariffPlan";
             provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
             int deleted = queryParameters.Get<int>("@deleted");
             return deleted;

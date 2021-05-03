@@ -31,7 +31,7 @@ namespace MobileOperatorApplication.Repository
             OracleDynamicParameters queryParameters = new OracleDynamicParameters();
             queryParameters.Add("@phone_number_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
-            string sql = $"PhoneNumber_Package.GetAllPhoneNumbers";
+            string sql = $"C##BAA.PhoneNumber_Package.GetAllPhoneNumbers";
             return provider.Connection.Query<PhoneNumber>(sql, queryParameters, commandType: CommandType.StoredProcedure);
         }
 
@@ -41,7 +41,7 @@ namespace MobileOperatorApplication.Repository
             queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
             queryParameters.Add("@phone_number_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
-            string sql = $@"PhoneNumber_Package.GetPhoneNumberById";
+            string sql = $@"C##BAA.PhoneNumber_Package.GetPhoneNumberById";
             return provider.Connection.QueryFirstOrDefault<PhoneNumber>(sql, queryParameters, commandType: CommandType.StoredProcedure);
         }
 
@@ -51,7 +51,7 @@ namespace MobileOperatorApplication.Repository
             queryParameters.Add("@par_number", phone_number, OracleMappingType.NVarchar2, ParameterDirection.Input);
             queryParameters.Add("@phone_number_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
-            string sql = $@"PhoneNumber_Package.GetPhoneNumberByNumber";
+            string sql = $@"C##BAA.PhoneNumber_Package.GetPhoneNumberByNumber";
             return provider.Connection.QueryFirstOrDefault<PhoneNumber>(sql, queryParameters, commandType: CommandType.StoredProcedure);
         }
 
@@ -62,7 +62,7 @@ namespace MobileOperatorApplication.Repository
             queryParameters.Add("@par_contract_id", item.CONTRACT_ID, OracleMappingType.Int64, ParameterDirection.Input);
             queryParameters.Add("@inserted", 0, OracleMappingType.Int64, ParameterDirection.Output);
 
-            string sql = $@"PhoneNumber_Package.InsertPhoneNumber";
+            string sql = $@"C##BAA.PhoneNumber_Package.InsertPhoneNumber";
             provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
             int inserted = queryParameters.Get<int>("@inserted");
             return inserted;
@@ -76,7 +76,7 @@ namespace MobileOperatorApplication.Repository
             queryParameters.Add("@par_contract_id", item.CONTRACT_ID, OracleMappingType.Int64, ParameterDirection.Input);
             queryParameters.Add("@updated", 0, OracleMappingType.Int64, ParameterDirection.Output);
 
-            string sql = $@"PhoneNumber_Package.UpdatePhoneNumber";
+            string sql = $@"C##BAA.PhoneNumber_Package.UpdatePhoneNumber";
             provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
             int updated = queryParameters.Get<int>("@updated");
             return updated;
@@ -88,7 +88,7 @@ namespace MobileOperatorApplication.Repository
             queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
             queryParameters.Add("@deleted", 0, OracleMappingType.Int64, ParameterDirection.Output);
 
-            string sql = $@"PhoneNumber_Package.DeletePhoneNumber";
+            string sql = $@"C##BAA.PhoneNumber_Package.DeletePhoneNumber";
             provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
             int deleted = queryParameters.Get<int>("@deleted");
             return deleted;

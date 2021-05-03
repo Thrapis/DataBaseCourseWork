@@ -18,10 +18,10 @@ namespace MobileOperatorApplication.Oracle
         public OracleProvider()
         {
             string connectionString = "DATA SOURCE = DESKTOP-H8ENAQU:1521 / orcl;" +
-                " USER ID=c##baa; PASSWORD=12345; Pooling = False;";
+                " USER ID=AppConnectorUser; PASSWORD=12345; Pooling = False;";
             Connection = new OracleConnection(connectionString);
             Connection.Open();
-            Console.WriteLine(Connection.GetSessionInfo());
+            Console.WriteLine(Connection.ConnectionString);
         }
 
         public void Dispose()
@@ -37,7 +37,7 @@ namespace MobileOperatorApplication.Oracle
             queryParameters.Add("@par_access_level", access_level, OracleMappingType.Int32, ParameterDirection.Input);
             queryParameters.Add("@created", 0, OracleMappingType.Int32, ParameterDirection.Output);
 
-            string sql = $@"Account_Package.CreateAccount";
+            string sql = $@"C##BAA.Account_Package.CreateAccount";
             Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
             int created = queryParameters.Get<int>("@created");
             return created;
@@ -50,7 +50,7 @@ namespace MobileOperatorApplication.Oracle
             queryParameters.Add("@par_password", password, OracleMappingType.NVarchar2, ParameterDirection.Input);
             queryParameters.Add("@ret_access_level", -999, OracleMappingType.Int32, ParameterDirection.Output);
 
-            string sql = $@"Account_Package.GetAccount";
+            string sql = $@"C##BAA.Account_Package.GetAccount";
             Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
             string outlogin = queryParameters.Get<string>("@par_username"); ;
             int access_level = queryParameters.Get<int>("@ret_access_level");
@@ -73,7 +73,7 @@ namespace MobileOperatorApplication.Oracle
             queryParameters.Add("@par_new_password", new_password, OracleMappingType.NVarchar2, ParameterDirection.Input);
             queryParameters.Add("@changed", 0, OracleMappingType.Int32, ParameterDirection.Output);
 
-            string sql = $@"Account_Package.ChangeAccountPassword";
+            string sql = $@"C##BAA.Account_Package.ChangeAccountPassword";
             Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
             int changed = queryParameters.Get<int>("@changed");
             return changed;

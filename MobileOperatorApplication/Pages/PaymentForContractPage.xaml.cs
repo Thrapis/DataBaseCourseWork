@@ -49,7 +49,7 @@ namespace MobileOperatorApplication.Pages
 
             try
             {
-                float value = (float)Convert.ToDouble(Value.Text);
+                float value = (float)Math.Floor(float.Parse(Value.Text) * 100) / 100;
 
                 if (value <= 0 || CardNumber.Text.Length != 16)
                     throw new Exception();

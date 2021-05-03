@@ -13,7 +13,7 @@
         </Grid.Background>
         <Border BorderThickness="0" CornerRadius="10" Background="WhiteSmoke" Opacity="1" Width="400" Height="300">
             <Grid >
-                <TextBlock Text="Autorization" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-220,0,0" FontSize="20"/>
+                <TextBlock Text="Authorization" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-220,0,0" FontSize="20"/>
                 <TextBlock x:Name="Message" Text="" Foreground="Red" TextWrapping="Wrap" Width="160"
                        HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-140,0,0" FontSize="12"/>
                 <TextBlock Text="Login" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-230,-60,0,0" FontSize="20"/>

@@ -31,7 +31,7 @@ namespace MobileOperatorApplication.Repository
             OracleDynamicParameters queryParameters = new OracleDynamicParameters();
             queryParameters.Add("@service_desc_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
-            string sql = $"ServiceDescription_Package.GetAllServiceDescriptions";
+            string sql = $"C##BAA.ServiceDescription_Package.GetAllServiceDescriptions";
             return provider.Connection.Query<ServiceDescription>(sql, queryParameters, commandType: CommandType.StoredProcedure);
         }
 
@@ -41,7 +41,7 @@ namespace MobileOperatorApplication.Repository
             queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
             queryParameters.Add("@service_desc_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
-            string sql = $@"ServiceDescription_Package.GetServiceDescriptionById";
+            string sql = $@"C##BAA.ServiceDescription_Package.GetServiceDescriptionById";
             return provider.Connection.QueryFirstOrDefault<ServiceDescription>(sql, queryParameters, commandType: CommandType.StoredProcedure);
         }
 
@@ -52,7 +52,7 @@ namespace MobileOperatorApplication.Repository
             queryParameters.Add("@par_service_description", item.SERVICE_DESCRIPTION, OracleMappingType.NVarchar2, ParameterDirection.Input);
             queryParameters.Add("@inserted", 0, OracleMappingType.Int64, ParameterDirection.Output);
 
-            string sql = $@"ServiceDescription_Package.InsertServiceDescription";
+            string sql = $@"C##BAA.ServiceDescription_Package.InsertServiceDescription";
             provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
             int inserted = queryParameters.Get<int>("@inserted");
             return inserted;
@@ -66,7 +66,7 @@ namespace MobileOperatorApplication.Repository
             queryParameters.Add("@par_service_description", item.SERVICE_DESCRIPTION, OracleMappingType.NVarchar2, ParameterDirection.Input);
             queryParameters.Add("@updated", 0, OracleMappingType.Int64, ParameterDirection.Output);
 
-            string sql = $@"ServiceDescription_Package.UpdateServiceDescription";
+            string sql = $@"C##BAA.ServiceDescription_Package.UpdateServiceDescription";
             provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
             int updated = queryParameters.Get<int>("@updated");
             return updated;
@@ -78,7 +78,7 @@ namespace MobileOperatorApplication.Repository
             queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
             queryParameters.Add("@deleted", 0, OracleMappingType.Int64, ParameterDirection.Output);
 
-            string sql = $@"ServiceDescription_Package.DeleteServiceDescription";
+            string sql = $@"C##BAA.ServiceDescription_Package.DeleteServiceDescription";
             provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
             int deleted = queryParameters.Get<int>("@deleted");
             return deleted;

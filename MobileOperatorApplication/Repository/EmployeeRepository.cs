@@ -31,7 +31,7 @@ namespace MobileOperatorApplication.Repository
             OracleDynamicParameters queryParameters = new OracleDynamicParameters();
             queryParameters.Add("@employee_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
-            string sql = $"Employee_Package.GetAllEmployees";
+            string sql = $"C##BAA.Employee_Package.GetAllEmployees";
             return provider.Connection.Query<Employee>(sql, queryParameters, commandType: CommandType.StoredProcedure);
         }
 
@@ -41,7 +41,7 @@ namespace MobileOperatorApplication.Repository
             queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
             queryParameters.Add("@employee_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
-            string sql = $@"Employee_Package.GetEmployeeById";
+            string sql = $@"C##BAA.Employee_Package.GetEmployeeById";
             return provider.Connection.QueryFirstOrDefault<Employee>(sql, queryParameters, commandType: CommandType.StoredProcedure);
         }
 
@@ -51,7 +51,7 @@ namespace MobileOperatorApplication.Repository
             queryParameters.Add("@par_login", login, OracleMappingType.NVarchar2, ParameterDirection.Input);
             queryParameters.Add("@employee_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
-            string sql = $@"Employee_Package.GetEmployeeByLogin";
+            string sql = $@"C##BAA.Employee_Package.GetEmployeeByLogin";
             return provider.Connection.QueryFirstOrDefault<Employee>(sql, queryParameters, commandType: CommandType.StoredProcedure);
         }
 
@@ -63,7 +63,7 @@ namespace MobileOperatorApplication.Repository
             queryParameters.Add("@par_account_login", item.ACCOUNT_LOGIN, OracleMappingType.NVarchar2, ParameterDirection.Input);
             queryParameters.Add("@inserted", 0, OracleMappingType.Int64, ParameterDirection.Output);
 
-            string sql = $@"Employee_Package.InsertEmployee";
+            string sql = $@"C##BAA.Employee_Package.InsertEmployee";
             provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
             int inserted = queryParameters.Get<int>("@inserted");
             return inserted;
@@ -78,7 +78,7 @@ namespace MobileOperatorApplication.Repository
             queryParameters.Add("@par_account_login", item.ACCOUNT_LOGIN, OracleMappingType.NVarchar2, ParameterDirection.Input);
             queryParameters.Add("@updated", 0, OracleMappingType.Int64, ParameterDirection.Output);
 
-            string sql = $@"Employee_Package.UpdateEmployee";
+            string sql = $@"C##BAA.Employee_Package.UpdateEmployee";
             provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
             int updated = queryParameters.Get<int>("@updated");
             return updated;
@@ -90,7 +90,7 @@ namespace MobileOperatorApplication.Repository
             queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
             queryParameters.Add("@deleted", 0, OracleMappingType.Int64, ParameterDirection.Output);
 
-            string sql = $@"Employee_Package.DeleteEmployee";
+            string sql = $@"C##BAA.Employee_Package.DeleteEmployee";
             provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
             int deleted = queryParameters.Get<int>("@deleted");
             return deleted;
@@ -102,7 +102,7 @@ namespace MobileOperatorApplication.Repository
             queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
             queryParameters.Add("@contract_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
-            string sql = $"Employee_Package.GetAllContractsByEmployeeId";
+            string sql = $"C##BAA.Employee_Package.GetAllContractsByEmployeeId";
             return provider.Connection.Query<Contract>(sql, queryParameters, commandType: CommandType.StoredProcedure);
         }
 

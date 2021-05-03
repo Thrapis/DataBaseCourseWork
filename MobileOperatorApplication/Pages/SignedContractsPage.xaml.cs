@@ -47,7 +47,6 @@ namespace MobileOperatorApplication.Pages
             {
                 ContractsStack.Children.Add(GetContractRow(Contracts.ElementAt(i)));
             }
-            Console.WriteLine();
         }
 
         Grid GetContractRow(Contract contract)

@@ -75,6 +75,7 @@ namespace MobileOperatorApplication
             ContractsB.Visibility = Visibility.Collapsed;
             ServicesB.Visibility = Visibility.Collapsed;
             PhoneNumbersB.Visibility = Visibility.Collapsed;
+            DebitsAndPaymentsB.Visibility = Visibility.Collapsed;
             OpenSignedContractsPage(null, null);
             Overlay.Content = null;
         }
@@ -138,6 +139,10 @@ namespace MobileOperatorApplication
         public void OpenSignedContractsPage(object sender, EventArgs e)
         {
             Main.Content = new SignedContractsPage(Provider, Employee);
+        }
+        public void OpenDebitsAndPaymentsPage(object sender, EventArgs e)
+        {
+            Main.Content = new DebitsAndPaymentsPage(Provider, Client);
         }
     }
 }

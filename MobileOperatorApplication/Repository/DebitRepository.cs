@@ -31,7 +31,7 @@ namespace MobileOperatorApplication.Repository
 			OracleDynamicParameters queryParameters = new OracleDynamicParameters();
 			queryParameters.Add("@debit_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
-			string sql = $"Debit_Package.GetAllDebits";
+			string sql = $"C##BAA.Debit_Package.GetAllDebits";
 			return provider.Connection.Query<Debit>(sql, queryParameters, commandType: CommandType.StoredProcedure);
 		}
 
@@ -41,7 +41,7 @@ namespace MobileOperatorApplication.Repository
 			queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
 			queryParameters.Add("@debit_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
-			string sql = $@"Debit_Package.GetDebitById";
+			string sql = $@"C##BAA.Debit_Package.GetDebitById";
 			return provider.Connection.QueryFirstOrDefault<Debit>(sql, queryParameters, commandType: CommandType.StoredProcedure);
 		}
 
@@ -54,7 +54,7 @@ namespace MobileOperatorApplication.Repository
 			queryParameters.Add("@par_reason", item.REASON, OracleMappingType.NVarchar2, ParameterDirection.Input);
 			queryParameters.Add("@inserted", 0, OracleMappingType.Int64, ParameterDirection.Output);
 
-			string sql = $@"Debit_Package.InsertDebit";
+			string sql = $@"C##BAA.Debit_Package.InsertDebit";
 			provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
 			int inserted = queryParameters.Get<int>("@inserted");
 			return inserted;
@@ -70,7 +70,7 @@ namespace MobileOperatorApplication.Repository
 			queryParameters.Add("@par_reason", item.REASON, OracleMappingType.NVarchar2, ParameterDirection.Input);
 			queryParameters.Add("@updated", 0, OracleMappingType.Int64, ParameterDirection.Output);
 
-			string sql = $@"Debit_Package.UpdateDebit";
+			string sql = $@"C##BAA.Debit_Package.UpdateDebit";
 			provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
 			int updated = queryParameters.Get<int>("@updated");
 			return updated;
@@ -82,7 +82,7 @@ namespace MobileOperatorApplication.Repository
 			queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
 			queryParameters.Add("@deleted", 0, OracleMappingType.Int64, ParameterDirection.Output);
 
-			string sql = $@"Debit_Package.DeleteDebit";
+			string sql = $@"C##BAA.Debit_Package.DeleteDebit";
 			provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
 			int deleted = queryParameters.Get<int>("@deleted");
 			return deleted;

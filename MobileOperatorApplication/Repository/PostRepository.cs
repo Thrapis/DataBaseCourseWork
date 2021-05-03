@@ -31,7 +31,7 @@ namespace MobileOperatorApplication.Repository
             OracleDynamicParameters queryParameters = new OracleDynamicParameters();
             queryParameters.Add("@post_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
-            string sql = $"Post_Package.GetAllPosts";
+            string sql = $"C##BAA.Post_Package.GetAllPosts";
             return provider.Connection.Query<Post>(sql, queryParameters, commandType: CommandType.StoredProcedure);
         }
 
@@ -41,7 +41,7 @@ namespace MobileOperatorApplication.Repository
             queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
             queryParameters.Add("@post_cur", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
-            string sql = $@"Post_Package.GetPostById";
+            string sql = $@"C##BAA.Post_Package.GetPostById";
             return provider.Connection.QueryFirstOrDefault<Post>(sql, queryParameters, commandType: CommandType.StoredProcedure);
         }
 
@@ -52,7 +52,7 @@ namespace MobileOperatorApplication.Repository
             queryParameters.Add("@par_category", item.CATEGORY, OracleMappingType.NVarchar2, ParameterDirection.Input);
             queryParameters.Add("@inserted", 0, OracleMappingType.Int64, ParameterDirection.Output);
 
-            string sql = $@"Post_Package.InsertPost";
+            string sql = $@"C##BAA.Post_Package.InsertPost";
             provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
             int inserted = queryParameters.Get<int>("@inserted");
             return inserted;
@@ -66,7 +66,7 @@ namespace MobileOperatorApplication.Repository
             queryParameters.Add("@par_category", item.CATEGORY, OracleMappingType.NVarchar2, ParameterDirection.Input);
             queryParameters.Add("@updated", 0, OracleMappingType.Int64, ParameterDirection.Output);
 
-            string sql = $@"Post_Package.UpdatePost";
+            string sql = $@"C##BAA.Post_Package.UpdatePost";
             provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
             int updated = queryParameters.Get<int>("@updated");
             return updated;
@@ -78,7 +78,7 @@ namespace MobileOperatorApplication.Repository
             queryParameters.Add("@par_id", id, OracleMappingType.Int64, ParameterDirection.Input);
             queryParameters.Add("@deleted", 0, OracleMappingType.Int64, ParameterDirection.Output);
 
-            string sql = $@"Post_Package.DeletePost";
+            string sql = $@"C##BAA.Post_Package.DeletePost";
             provider.Connection.Query(sql, queryParameters, commandType: CommandType.StoredProcedure);
             int deleted = queryParameters.Get<int>("@deleted");
             return deleted;

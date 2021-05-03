@@ -185,7 +185,7 @@ namespace MobileOperatorApplication.Pages
                 }
             }
 
-            ServiceRepository serviceRepository = new ServiceRepository();
+            ServiceRepository serviceRepository = new ServiceRepository(Provider);
             Service service = new Service(Contract.ID, serviceDescription.ID, GeneratedCoast, DateTime.Now, DateTime.Now.AddMonths(3));
             service.ID = serviceRepository.Insert(service);
             if (service.ID == -1)
@@ -199,7 +199,7 @@ namespace MobileOperatorApplication.Pages
                     Random rand = new Random();
                     PhoneNumberRepository phoneNumberRepository = new PhoneNumberRepository(Provider);
                     int temp_insert = 0;
-                    while (temp_insert < 3)
+                    while (temp_insert < 2)
                         temp_insert += phoneNumberRepository.Insert(new PhoneNumber(GetRandomPhoneNumber(rand), Contract.ID)) != -1 ? 1 : 0;
                 }
 
